@@ -1,42 +1,37 @@
 version: "3.9"
 
-
 services:
-immich-server:
-image: ghcr.io/immich-app/immich-server:release
-restart: unless-stopped
-env_file: .env
-volumes:
-- ./library:/usr/src/app/upload
-labels:
-- "traefik.enable=true"
-- "traefik.http.routers.immich.rule=Host(`photos.mondomaine.fr`)"
-- "traefik.http.routers.immich.entrypoints=websecure"
-- "traefik.http.routers.immich.tls.certresolver=le"
-networks:
-- proxy
+  immich-server:
+    image: ghcr.io/immich-app/immich-server:release
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./library:/usr/src/app/upload
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.immich.rule=Host(`photos.mondomaine.fr`)"
+      - "traefik.http.routers.immich.entrypoints=websecure"
+      - "traefik.http.routers.immich.tls.certresolver=le"
+    networks:
+      - proxy
 
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: immich
+      POSTGRES_USER: immich
+      POSTGRES_PASSWORD: strongpassword
+    volumes:
+      - postgres:/var/lib/postgresql/data
 
-postgres:
-image: postgres:16
-restart: unless-stopped
-environment:
-POSTGRES_DB: immich
-POSTGRES_USER: immich
-POSTGRES_PASSWORD: strongpassword
-volumes:
-- postgres:/var/lib/postgresql/data
-
-
-redis:
-image: redis:7
-restart: unless-stopped
-
+  redis:
+    image: redis:7
+    restart: unless-stopped
 
 volumes:
-postgres:
-
+  postgres:
 
 networks:
-proxy:
-external: true
+  proxy:
+    external: true
