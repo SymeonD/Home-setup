@@ -1,5 +1,5 @@
-docker_root: /srv/docker
-data_root: /srv/data
+docker_root: /serv/docker
+data_root: /serv/docker
 backup_root: /mnt/backup
 
 timezone: Europe/Paris
