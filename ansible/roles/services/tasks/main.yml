@@ -1,0 +1,26 @@
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ docker_root }}"
+    - "{{ data_root }}/immich"
+    - "{{ data_root }}/nextcloud"
+
+- name: Start Traefik
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/traefik"
+
+- name: Start Immich
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/immich"
+
+- name: Start Nextcloud
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/nextcloud"
