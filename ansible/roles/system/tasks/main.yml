@@ -1,0 +1,14 @@
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+
+- name: Install base packages
+  apt:
+    name:
+      - curl
+      - ca-certificates
+      - gnupg
+      - lsb-release
+      - rsync
+      - cron
+    update_cache: true
