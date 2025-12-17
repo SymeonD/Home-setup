@@ -1,0 +1,26 @@
+- name: Create backup directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ backup_root }}"
+    - "{{ backup_root }}/data"
+    - "{{ backup_root }}/db"
+
+- name: Install backup script
+  copy:
+    dest: /usr/local/bin/docker-backup.sh
+    mode: '0755'
+    content: |
+      #!/bin/bash
+      set -e
+
+      echo "== Backup started $(date) =="
+
+      rsync -av --delete {{ data_root }}/ {{ backup_root }}/data/
+
+      docker exec immich_postgres pg_dumpall -U postgres > {{ backup_root }}/db/immich.sql
+      docker exec nextcloud_db mysqldump -u root --all-databases > {{ backup_root }}/db/nextcloud.sql
+
+      echo "== Backup finished $(date) =="
