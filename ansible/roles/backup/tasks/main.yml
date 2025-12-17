@@ -24,3 +24,10 @@
       docker exec nextcloud_postgres mysqldump -u root --all-databases > {{ backup_root }}/db/nextcloud.sql
 
       echo "== Backup finished $(date) =="
+
+- name: Schedule daily backup
+  cron:
+    name: "Docker daily backup"
+    hour: "3"
+    minute: "0"
+    job: "/usr/local/bin/docker-backup.sh >> /var/log/docker-backup.log 2>&1"
