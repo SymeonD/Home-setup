@@ -15,7 +15,7 @@ services:
     networks:
       - proxy
 
-  postgres:
+  nextcloud-postgres:
     image: postgres:16
     restart: unless-stopped
     environment:
@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres:
+  nextcloud-postgres:
 
 networks:
   proxy:
