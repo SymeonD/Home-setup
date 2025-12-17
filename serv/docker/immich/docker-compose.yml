@@ -15,7 +15,7 @@ services:
     networks:
       - proxy
 
-  postgres:
+  immich-postgres:
     image: postgres:16
     restart: unless-stopped
     environment:
@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres:
+  immich-postgres:
 
 networks:
   proxy:
