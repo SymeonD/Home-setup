@@ -21,6 +21,6 @@
       rsync -av --delete {{ data_root }}/ {{ backup_root }}/data/
 
       docker exec immich_postgres pg_dumpall -U postgres > {{ backup_root }}/db/immich.sql
-      docker exec nextcloud_db mysqldump -u root --all-databases > {{ backup_root }}/db/nextcloud.sql
+      docker exec nextcloud_postgres mysqldump -u root --all-databases > {{ backup_root }}/db/nextcloud.sql
 
       echo "== Backup finished $(date) =="
