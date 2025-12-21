@@ -4,9 +4,14 @@ services:
     container_name: traefik
     restart: unless-stopped
 
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+
     ports:
       - "80:80"
       - "443:443"
 
     volumes:
-      - /srv/docker/traefik/traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
