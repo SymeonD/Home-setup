@@ -1,4 +1,0 @@
-/* Prevent user interaction on content */
-#imgframe {
-	pointer-events: none;
-}
