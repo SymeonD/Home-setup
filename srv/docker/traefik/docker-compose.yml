@@ -4,8 +4,18 @@ services:
     container_name: traefik
     restart: unless-stopped
 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.de-almeida.freeboxos.free.fr`)"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$apr1$xxxxx"
+      - "traefik.http.routers.traefik.middlewares=auth"
+
+
     command:
-      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--api.insecure=false" 
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
 
