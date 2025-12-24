@@ -30,8 +30,8 @@ services:
       - "traefik.http.routers.traefik.service=api@internal"
 
     networks:
-      - proxy
+      - traefik-net
 
 networks:
-  proxy:
+  traefik-net:
     external: true
