@@ -19,7 +19,9 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-
+    networks:
+      - traefik-net
+      - immich-net
 
   immich-postgres:
     image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
@@ -38,6 +40,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - immich-net
 
   immich-microservices:
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION}
@@ -53,18 +57,30 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    networks:
+      - immich-net
 
 
   immich-machine-learning:
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
     container_name: immich_ml
     restart: unless-stopped
+    networks:
+      - immich-net
 
   redis:
     image: redis:7
     container_name: immich-redis
     restart: unless-stopped
+    networks:
+      - immich-net
 
 volumes:
   immich-postgres:
+
+networks:
+  traefik-net:
+    external: true
+  immich-net:
+    driver: bridge
 
