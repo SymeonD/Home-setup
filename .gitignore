@@ -1,3 +1,4 @@
 letsencrypt/
 data/
-docker/immich/library/
+library/
+acme.json
