@@ -17,7 +17,7 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: ${EMAIL}
+      email: EMAIL_REDACTED
       storage: /acme.json
       httpChallenge:
         entryPoint: web
