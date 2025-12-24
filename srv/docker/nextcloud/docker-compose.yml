@@ -13,7 +13,7 @@ services:
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
       - "traefik.http.routers.nextcloud.tls.certresolver=le"
     networks:
-      - proxy
+      - traefik-network
 
   nextcloud-postgres:
     image: postgres:16
@@ -33,5 +33,5 @@ volumes:
   nextcloud-postgres:
 
 networks:
-  proxy:
+  traefik-network:
     external: true
