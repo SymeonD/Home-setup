@@ -17,7 +17,7 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: ${EMAIL}
+      email: symeon.dealmeida@gmail.com
       storage: /acme.json
       httpChallenge:
         entryPoint: web
