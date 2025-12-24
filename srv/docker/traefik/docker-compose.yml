@@ -28,6 +28,7 @@ services:
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.docker.network=traefik-net"
 
     networks:
       - traefik-net
