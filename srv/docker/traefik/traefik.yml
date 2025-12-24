@@ -15,9 +15,7 @@ entryPoints:
     address: ":443"
     transport:
       respondingTimeouts:
-        readTimeout: 600s
-        idleTimeout: 600s
-        writeTimeout: 600s
+        readTimeout: "0s"
 
 certificatesResolvers:
   letsencrypt:
