@@ -11,11 +11,16 @@ services:
       - ./library:/usr/src/app/upload
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)"
+      - "traefik.http.routers.immich.rule=Host(`immich.dealmeida.cloud`)"
       - "traefik.http.routers.immich.entrypoints=websecure"
       - "traefik.http.routers.immich.tls=true"
       - "traefik.http.routers.immich.tls.certresolver=letsencrypt"
       - "traefik.http.services.immich.loadbalancer.server.port=2283"
+      # Well known for ACME HTTP challenge
+      - "traefik.http.routers.immich-wellknown.rule=Host(`immich.dealmeida.cloud`) && PathPrefix(`/.well-known/immich`)"
+      - "traefik.http.routers.immich-wellknown.entrypoints=websecure"
+      - "traefik.http.routers.immich-wellknown.tls.certresolver=letsencrypt"
+      - "traefik.http.services.immich-wellknown.loadbalancer.server.port=2283"
     ports:
       - "2283:2283"
     depends_on:
