@@ -3,6 +3,7 @@ version: "3.9"
 services:
   immich-server:
     image: ghcr.io/immich-app/immich-server:release
+    command: ["start.sh", "immich"]
     container_name: immich-server
     restart: unless-stopped
     env_file: .env
@@ -12,8 +13,11 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)"
       - "traefik.http.routers.immich.entrypoints=websecure"
+      - "traefik.http.routers.immich.tls=true"
       - "traefik.http.routers.immich.tls.certresolver=letsencrypt"
       - "traefik.http.services.immich.loadbalancer.server.port=2283"
+    ports:
+      - "2283:2283"
     depends_on:
       immich-postgres:
         condition: service_healthy
