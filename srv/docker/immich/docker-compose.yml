@@ -39,7 +39,7 @@ services:
     command: ["start.sh", "microservices"]
     depends_on:
       - redis
-      - database
+      - immich-postgres
 
   immich-machine-learning:
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
