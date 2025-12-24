@@ -1,4 +1,4 @@
 networks:
-proxy:
-name: proxy
-driver: bridge
+  traefik-network:
+    name: traefik-network
+    driver: bridge
