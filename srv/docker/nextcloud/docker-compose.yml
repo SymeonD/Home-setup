@@ -12,13 +12,14 @@ services:
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.dealmeida.cloud`)"
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
       - "traefik.http.routers.nextcloud.tls.certresolver=le"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=8080"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
       - "traefik.docker.network=traefik-net"
     depends_on:
       - nextcloud-postgres
       - redis
     networks:
       - traefik-net
+      - nextcloud-net
 
   nextcloud-postgres:
     image: postgres:16
@@ -29,10 +30,14 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - nextcloud-postgres:/var/lib/postgresql/data
+    networks:
+      - nextcloud-net
 
   redis:
     image: redis:7
     restart: unless-stopped
+    networks:
+      - nextcloud-net
 
 volumes:
   nextcloud-postgres:
@@ -40,3 +45,5 @@ volumes:
 networks:
   traefik-net:
     external: true
+  nextcloud-net:
+    driver: bridge
