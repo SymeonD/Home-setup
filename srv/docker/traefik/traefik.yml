@@ -26,8 +26,15 @@ certificatesResolvers:
       storage: /acme.json
       httpChallenge:
         entryPoint: web
-      caserver: https://acme-staging-v02.api.letsencrypt.org/directory
-
+  letsencrypt-staging:
+    acme:
+      email: symeon.dealmeida@gmail.com
+      storage: ./staging/acme.json
+      httpChallenge:
+        entryPoint: web
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      tlschallenge: true
+      
 providers:
   docker:
     exposedByDefault: false
