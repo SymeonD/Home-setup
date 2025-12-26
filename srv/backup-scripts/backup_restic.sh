@@ -3,6 +3,11 @@
 export RESTIC_REPOSITORY=/mnt/backups/restic-repo
 export RESTIC_PASSWORD="grouille123"
 
+# Initialiser le repo si nécessaire
+if [ ! -f "$RESTIC_REPO/config" ]; then
+    restic init --repo $RESTIC_REPO
+fi
+
 # Immich uploads
 restic backup /srv/data/immich/ -v --tag immich
 
