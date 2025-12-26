@@ -31,6 +31,7 @@ Home setup for Immich + Nextcloud
 - [x] Add Nextcloud backup
 - [ ] Add reverse proxy ssl and security headers
 - [ ] Add Immich and Nextcloud to monitoring
+- [ ] Do ansible setup
 
 Restore restic
 sudo restic -r /mnt/backups/restic-repo restore <snapshot_id>:srv/data/immich --target /srv/data/immich
