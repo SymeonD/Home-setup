@@ -39,7 +39,7 @@ services:
       POSTGRES_INITDB_ARGS: '--data-checksums'
     shm_size: 128mb
     volumes:
-      - srv/data/postgres/immich:/var/lib/postgresql/data
+      - /srv/data/postgres/immich:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U immich"]
       interval: 5s
