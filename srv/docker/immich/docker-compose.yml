@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     env_file: .env
     volumes:
-      - ./library:/usr/src/app/upload
+      - /srv/data/immich/library:/usr/src/app/upload
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.immich.rule=Host(`immich.dealmeida.cloud`)"
@@ -39,7 +39,7 @@ services:
       POSTGRES_INITDB_ARGS: '--data-checksums'
     shm_size: 128mb
     volumes:
-      - immich-postgres:/var/lib/postgresql/data
+      - srv/data/postgres/immich:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U immich"]
       interval: 5s
@@ -55,7 +55,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./library:/usr/src/app/upload
+      - /srv/data/immich/library:/usr/src/app/upload
     command: ["start.sh", "microservices"]
     depends_on:  
       immich-postgres:
@@ -79,9 +79,6 @@ services:
     restart: unless-stopped
     networks:
       - immich-net
-
-volumes:
-  immich-postgres:
 
 networks:
   traefik-net:

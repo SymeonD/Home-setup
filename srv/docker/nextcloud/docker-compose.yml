@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     env_file: .env
     volumes:
-      - ./data:/var/www/html
+      - /srv/data/nextcloud/html:/var/www/html
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.dealmeida.cloud`)"
@@ -32,7 +32,7 @@ services:
       POSTGRES_USER: nc
       POSTGRES_PASSWORD: postgres
     volumes:
-      - nextcloud-postgres:/var/lib/postgresql/data
+      - /srv/data/postgres/nextcloud:/var/lib/postgresql/data
     networks:
       - nextcloud-net
 
@@ -42,9 +42,6 @@ services:
     restart: unless-stopped
     networks:
       - nextcloud-net
-
-volumes:
-  nextcloud-postgres:
 
 networks:
   traefik-net:
