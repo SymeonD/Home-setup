@@ -20,20 +20,20 @@ entryPoints:
         writeTimeout: 600s
 
 certificatesResolvers:
-  #letsencrypt:
-  #  acme:
-  #    email: symeon.dealmeida@gmail.com
-  #    storage: /acme.json
-  #    httpChallenge:
-  #      entryPoint: web
-  letsencrypt-staging:
-    acme:
-      email: symeon.dealmeida@gmail.com
-      storage: /acme.json
-      httpChallenge:
-        entryPoint: web
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
-      tlschallenge: true
+  letsencrypt:
+   acme:
+     email: symeon.dealmeida@gmail.com
+     storage: /acme.json
+     httpChallenge:
+       entryPoint: web
+  # letsencrypt-staging:
+  #   acme:
+  #     email: symeon.dealmeida@gmail.com
+  #     storage: /acme.json
+  #     httpChallenge:
+  #       entryPoint: web
+  #     caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+  #     tlschallenge: true
       
 providers:
   docker:
