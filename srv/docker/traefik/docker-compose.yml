@@ -15,8 +15,8 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.yml:/traefik.yml:ro
-      - ./acme.json:/acme.json
+      - /srv/data/traefik/traefik.yml:/traefik.yml:ro
+      - /srv/data/traefik/acme.json:/acme.json
 
     command:
       - "--configFile=/traefik.yml"
