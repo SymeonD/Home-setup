@@ -3,6 +3,11 @@ version: "3.9"
 services:
   immich-server:
     image: ghcr.io/immich-app/immich-server:release
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+          cpus: 4
     command: ["start.sh", "immich"]
     container_name: immich-server
     restart: unless-stopped
@@ -50,6 +55,11 @@ services:
 
   immich-microservices:
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION}
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+          cpus: 4
     container_name: immich_microservices
     restart: unless-stopped
     env_file:
@@ -68,6 +78,11 @@ services:
 
   immich-machine-learning:
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+          cpus: 4
     container_name: immich_ml
     restart: unless-stopped
     networks:
