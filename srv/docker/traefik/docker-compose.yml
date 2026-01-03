@@ -6,6 +6,10 @@ services:
     container_name: traefik
     restart: unless-stopped
 
+    mem_limit: 512m
+    mem_reservation: 128m
+    cpus: 1.0
+
     env_file:
       - .env
 

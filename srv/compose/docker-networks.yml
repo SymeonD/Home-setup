@@ -1,4 +1,4 @@
 networks:
-  traefik-network:
-    name: traefik-network
+  traefik-net:
+    name: traefik-net
     driver: bridge
