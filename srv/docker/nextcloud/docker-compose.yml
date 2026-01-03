@@ -6,6 +6,9 @@ services:
     container_name: nextcloud
     restart: unless-stopped
     env_file: .env
+    mem_limit: 3g
+    mem_reservation: 1g
+    cpus: 2.0
     volumes:
       - /srv/data/nextcloud/html:/var/www/html
     labels:
@@ -26,6 +29,9 @@ services:
     image: postgres:16
     container_name: nextcloud-postgres
     restart: unless-stopped
+    mem_limit: 2g
+    mem_reservation: 512m
+    cpus: 1.5
     environment:
       POSTGRES_HOST: nextcloud-postgres
       POSTGRES_DB: nextcloud
@@ -40,6 +46,9 @@ services:
     image: redis:7
     container_name: nextcloud-redis
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128m
+    cpus: 0.5
     networks:
       - nextcloud-net
 
