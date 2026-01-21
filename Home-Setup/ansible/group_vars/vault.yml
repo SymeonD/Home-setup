@@ -1,0 +1,5 @@
+restic_password: "grouille123"
+postgres_password: "postgres"
+nextcloud_admin_user: "admin"
+nextcloud_admin_password: "admin"
+jwt_secret: "Cemotesttressecret"

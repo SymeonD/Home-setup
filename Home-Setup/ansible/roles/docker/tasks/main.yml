@@ -8,9 +8,18 @@
   apt:
     name: docker-compose-plugin
     state: present
+    update_cache: yes
 
 - name: Enable Docker
   systemd:
     name: docker
     enabled: true
     state: started
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+#TODO: create docker networks

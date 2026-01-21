@@ -1,7 +1,3 @@
-- name: Set timezone
-  timezone:
-    name: "{{ timezone }}"
-
 - name: Install base packages
   apt:
     name:
@@ -9,6 +5,9 @@
       - ca-certificates
       - gnupg
       - lsb-release
-      - rsync
       - cron
+      - fail2ban
+      - htop
+      - restic
+    state: present
     update_cache: true
