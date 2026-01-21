@@ -11,6 +11,12 @@
       # === Traefik ===
       DOMAIN=DOMAIN_REDACTED
 
+- name: Ensure Traefik external network exists
+  docker_network:
+    name: traefik-net
+    state: present
+    external: true
+
 - name: Deploy docker-compose.yml
   copy:
     src: docker-compose.yml

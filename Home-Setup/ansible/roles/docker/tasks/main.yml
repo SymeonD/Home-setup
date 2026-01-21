@@ -21,5 +21,3 @@
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
-
-#TODO: create docker networks

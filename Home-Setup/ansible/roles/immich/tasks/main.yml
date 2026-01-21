@@ -39,6 +39,12 @@
       IMMICH_SERVER_URL=https://immich.DOMAIN_REDACTED
       IMMICH_WEB_URL=https://immich.DOMAIN_REDACTED
 
+- name: Ensure Immich internal network
+  docker_network:
+    name: immich-net
+    driver: bridge
+    state: present
+
 - name: Deploy docker-compose.yml
   copy:
     src: docker-compose.yml
