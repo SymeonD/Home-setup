@@ -22,6 +22,11 @@
       # === Redis ===
       REDIS_HOST=redis
 
+- name: Ensure Nextcloud internal network
+  docker_network:
+    name: nextcloud-net
+    driver: bridge
+    state: present
 
 - name: Deploy docker-compose.yml
   copy:
