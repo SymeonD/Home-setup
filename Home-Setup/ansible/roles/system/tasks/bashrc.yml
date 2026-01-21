@@ -1,0 +1,5 @@
+- name: Create bashrc aliases
+  copy:
+    src: .bashrc
+    dest: /root/.bashrc
+    mode: '0644'

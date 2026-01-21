@@ -1,0 +1,24 @@
+- name: Create Traefik directory
+  file:
+    path: "{{ docker_root }}/traefik"
+    state: directory
+    mode: '0755'
+
+- name: Create .env for Traefik
+  copy:
+    dest: "{{ docker_root }}/traefik/.env"
+    content: |
+      # === Traefik ===
+      DOMAIN=DOMAIN_REDACTED
+
+- name: Deploy docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_root }}/traefik/docker-compose.yml"
+    mode: '0644'
+
+- name: Deploy Traefik config
+  copy:
+    src: traefik.yml
+    dest: "{{ docker_root }}/traefik/traefik.yml"
+    mode: '0644'

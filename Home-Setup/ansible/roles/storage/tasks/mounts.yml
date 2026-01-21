@@ -1,0 +1,48 @@
+# Backup mount
+- name: Create backup mount directory
+  file:
+    path: {{ backup_root }}
+    state: directory
+
+- name: Create backup mounts
+  mount:
+    path: {{ backup_root }}
+    src: /dev/sdb1
+    fstype: ext4
+    opts: defaults
+    state: mounted
+
+# Docker mount
+- name: Create mount point for Docker
+  file:
+    path: /var/lib/docker
+    state: directory
+
+- name: Format Docker LV if needed
+  filesystem:
+    fstype: ext4
+    dev: /dev/docker-vg/docker
+
+- name: Mount Docker LV
+  mount:
+    path: /var/lib/docker
+    src: /dev/docker-vg/docker
+    fstype: ext4
+    state: mounted
+
+- name: Create mount point for Data
+  file:
+    path: /srv/data
+    state: directory
+
+- name: Format Data LV if needed
+  filesystem:
+    fstype: ext4
+    dev: /dev/docker-vg/data
+
+- name: Mount Data LV
+  mount:
+    path: /srv/data
+    src: /dev/docker-vg/data
+    fstype: ext4
+    state: mounted

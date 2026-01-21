@@ -1,0 +1,5 @@
+- name: Storage | mounts
+  import_tasks: mounts.yml
+
+- name: Storage | LVM
+  import_tasks: lvm.yml

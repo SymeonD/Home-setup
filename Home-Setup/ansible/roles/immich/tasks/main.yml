@@ -1,0 +1,46 @@
+- name: Create Immich directory
+  file:
+    path: "{{ docker_root }}/immich"
+    state: directory
+    mode: '0755'
+
+- name: Create .env for Immich
+  copy:
+    dest: /srv/immich/.env
+    content: |
+      # === Immich ===
+      IMMICH_VERSION=release
+
+      # === Database ===
+      DB_HOSTNAME=immich-postgres
+      DB_PORT=5432
+      DB_USERNAME=immich
+      DB_PASSWORD={{ postgres_password }}
+      DB_DATABASE_NAME=immich
+
+      # === Redis ===
+      REDIS_HOST=redis
+      REDIS_PORT=6379
+
+      # === Upload ===
+      UPLOAD_LOCATION=/usr/src/app/upload
+
+      # === Machine learning (CPU only) ===
+      IMMICH_MACHINE_LEARNING_ENABLED=true
+      IMMICH_MACHINE_LEARNING_URL=http://immich-machine-learning:3003
+
+      # === Sécurité ===
+      JWT_SECRET={{ jwt_secret }}
+
+      # === Domaine ===
+      DOMAIN=DOMAIN_REDACTED
+      EMAIL=EMAIL_REDACTED
+
+      IMMICH_SERVER_URL=https://immich.DOMAIN_REDACTED
+      IMMICH_WEB_URL=https://immich.DOMAIN_REDACTED
+
+- name: Deploy docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_root }}/immich/docker-compose.yml"
+    mode: '0644'

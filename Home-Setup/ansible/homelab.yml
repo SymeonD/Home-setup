@@ -1,0 +1,14 @@
+- name: Homelab
+  hosts: all
+  # Makes ansible run as root
+  become: true
+  roles:
+    - system
+    - storage
+    - docker
+    - traefik
+    - immich
+    - nextcloud
+    - backup
+
+# Ansible Vault

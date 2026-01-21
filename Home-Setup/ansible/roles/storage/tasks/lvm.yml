@@ -1,0 +1,19 @@
+- name: Create docker group
+  lvg:
+    vg: docker-vg
+    pvs: /dev/nvme0n1p3
+  register: vg_created
+
+- name: Create docker volume
+  lvol:
+    vg: docker-vg
+    lv: docker
+    size: 50G
+    state: present
+
+- name: Create data volume
+  lvol:
+    vg: docker-vg
+    lv: data
+    size: 800G
+    state: present

@@ -1,0 +1,8 @@
+- name: System | timezone
+  import_tasks: timezone.yml
+
+- name: System | Base packages
+  import_tasks: packages.yml
+
+- name: System | Bashrc
+  import_tasks: bashrc.yml
