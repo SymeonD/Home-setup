@@ -1,0 +1,5 @@
+docker_root: /opt/docker
+data_root: /srv/data
+backup_root: /srv/backup
+
+timezone: Europe/Paris

@@ -1,7 +1,0 @@
-- hosts: server
-  become: true
-  roles:
-    - system
-    - docker
-    - services
-    - backup
