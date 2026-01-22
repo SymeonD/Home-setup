@@ -1,5 +1,9 @@
-- name: Storage | mounts
-  import_tasks: mounts.yml
-
 - name: Storage | LVM
   import_tasks: lvm.yml
+
+- name: Storage | backup
+  import_tasks: backup.yml
+  tags: [init_backup]
+
+- name: Storage | mounts
+  import_tasks: mounts.yml
