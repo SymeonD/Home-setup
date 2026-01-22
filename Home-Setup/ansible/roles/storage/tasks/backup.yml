@@ -1,0 +1,16 @@
+- name: Check if backup VG already exists
+  command: vgs backup-vg
+  register: backup_vg_check
+  failed_when: false
+  changed_when: false
+
+- name: Create backup VG
+  lvg:
+    vg: backup-vg
+    pvs: /dev/sda1
+
+- name: Create backup LV
+  lvol:
+    vg: backup-vg
+    lv: backup-lv
+    size: 100%FREE
