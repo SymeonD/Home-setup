@@ -8,12 +8,12 @@
   lvol:
     vg: docker-vg
     lv: docker
-    size: 50G
+    size: 3G
     state: present
 
 - name: Create data volume
   lvol:
     vg: docker-vg
     lv: data
-    size: 800G
+    size: 7G
     state: present
