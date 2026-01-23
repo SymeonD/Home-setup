@@ -95,3 +95,4 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /m
 - Docker change ansible use to ansible user id
 - README add --skip-tags to ansible start command
 - Remove external in traefik ansible
+- Change immich file to docker root for .env
