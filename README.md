@@ -86,3 +86,6 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /m
 - Setup Postgres backup
 - Setup cron jobs
 - Setup aliases and bashrc
+
+# TODO for main
+- Change docker-vg to ubuntu-vg (use default one, created by boot)

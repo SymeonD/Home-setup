@@ -1,19 +1,19 @@
 - name: Create docker group
   lvg:
-    vg: docker-vg
+    vg: ubuntu-vg
     pvs: /dev/sda3
   register: vg_created
 
 - name: Create docker volume
   lvol:
-    vg: docker-vg
+    vg: ubuntu-vg
     lv: docker
     size: 3G
     state: present
 
 - name: Create data volume
   lvol:
-    vg: docker-vg
+    vg: ubuntu-vg
     lv: data
     size: 7G
     state: present

@@ -21,12 +21,12 @@
 - name: Format Docker LV if needed
   filesystem:
     fstype: ext4
-    dev: /dev/docker-vg/docker
+    dev: /dev/ubuntu-vg/docker
 
 - name: Mount Docker LV
   mount:
     path: /var/lib/docker
-    src: /dev/docker-vg/docker
+    src: /dev/ubuntu-vg/docker
     fstype: ext4
     state: mounted
 
@@ -38,11 +38,11 @@
 - name: Format Data LV if needed
   filesystem:
     fstype: ext4
-    dev: /dev/docker-vg/data
+    dev: /dev/ubuntu-vg/data
 
 - name: Mount Data LV
   mount:
     path: /srv/data
-    src: /dev/docker-vg/data
+    src: /dev/ubuntu-vg/data
     fstype: ext4
     state: mounted
