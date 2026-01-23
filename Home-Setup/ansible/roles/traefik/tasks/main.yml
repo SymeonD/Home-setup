@@ -15,7 +15,6 @@
   docker_network:
     name: traefik-net
     state: present
-    external: true
 
 - name: Deploy docker-compose.yml
   copy:
