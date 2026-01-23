@@ -4,13 +4,20 @@
     path: "{{ backup_root }}"
     state: directory
 
-- name: Create backup mounts
+- name: Check if backup LV is already mounted
+  command: mount | grep /srv/backup
+  register: backup_mount_check
+  failed_when: false
+  changed_when: false
+
+- name: Mount backup LV if not already mounted
   mount:
-    path: "{{ backup_root }}"
+    path: /srv/backup
     src: /dev/backup-vg/backup-lv
-    fstype: ext4
+    fstype: auto
     opts: defaults
     state: mounted
+  when: backup_mount_check.stdout == ""
 
 # Docker mount
 - name: Create mount point for Docker
