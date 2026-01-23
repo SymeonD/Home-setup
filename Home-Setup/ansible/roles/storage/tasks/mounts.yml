@@ -18,38 +18,75 @@
     opts: defaults
     state: mounted
   when: backup_mounted.rc != 0
+  
+# -----------------------------
+# Docker LV et mount safe
+# -----------------------------
 
-# Docker mount
-- name: Create mount point for Docker
+- name: Ensure Docker mount directory exists
   file:
     path: /var/lib/docker
     state: directory
 
-- name: Format Docker LV if needed
+- name: Check if Docker filesystem exists
+  command: blkid /dev/ubuntu-vg/docker
+  register: docker_fs
+  failed_when: false
+  changed_when: false
+
+- name: Format Docker LV if no filesystem
   filesystem:
     fstype: ext4
     dev: /dev/ubuntu-vg/docker
+  when: docker_fs.rc != 0
 
-- name: Mount Docker LV
+- name: Check if Docker LV already mounted
+  command: mountpoint -q /var/lib/docker
+  register: docker_mounted
+  failed_when: false
+  changed_when: false
+
+- name: Mount Docker LV if not mounted
   mount:
     path: /var/lib/docker
     src: /dev/ubuntu-vg/docker
     fstype: ext4
+    opts: defaults
     state: mounted
+  when: docker_mounted.rc != 0
 
-- name: Create mount point for Data
+# -----------------------------
+# Data LV et mount safe
+# -----------------------------
+
+- name: Ensure Data mount directory exists
   file:
     path: /srv/data
     state: directory
 
-- name: Format Data LV if needed
+- name: Check if Data filesystem exists
+  command: blkid /dev/ubuntu-vg/data
+  register: data_fs
+  failed_when: false
+  changed_when: false
+
+- name: Format Data LV if no filesystem
   filesystem:
     fstype: ext4
     dev: /dev/ubuntu-vg/data
+  when: data_fs.rc != 0
 
-- name: Mount Data LV
+- name: Check if Data LV already mounted
+  command: mountpoint -q /srv/data
+  register: data_mounted
+  failed_when: false
+  changed_when: false
+
+- name: Mount Data LV if not mounted
   mount:
     path: /srv/data
     src: /dev/ubuntu-vg/data
     fstype: ext4
+    opts: defaults
     state: mounted
+  when: data_mounted.rc != 0
