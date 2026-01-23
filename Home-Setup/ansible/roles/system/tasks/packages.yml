@@ -9,5 +9,6 @@
       - fail2ban
       - htop
       - restic
+      - rsync
     state: present
     update_cache: true

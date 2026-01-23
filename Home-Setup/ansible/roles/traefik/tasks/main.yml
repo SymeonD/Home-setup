@@ -1,9 +1,3 @@
-- name: Install Docker Python SDK via apt
-  apt:
-    name: python3-docker
-    state: present
-    update_cache: yes
-
 - name: Create Traefik directory
   file:
     path: "{{ docker_root }}/traefik"
