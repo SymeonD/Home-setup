@@ -9,8 +9,15 @@
     vg: backup-vg
     pvs: /dev/sdb1
 
-- name: Create backup LV
+- name: Check if backup LV already exists
+  command: lvs --noheadings -o lv_name backup-vg
+  register: backup_lv_check
+  failed_when: false
+  changed_when: false
+
+- name: Create backup LV if missing
   lvol:
     vg: backup-vg
     lv: backup-lv
     size: 100%FREE
+  when: "'backup-lv' not in backup_lv_check.stdout"
