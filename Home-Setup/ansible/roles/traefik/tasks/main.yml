@@ -27,3 +27,9 @@
     src: traefik.yml
     dest: "{{ docker_root }}/traefik/traefik.yml"
     mode: '0644'
+
+- name: Start Traefik
+  docker_compose:
+    file: "{{ docker_root }}/traefik/docker-compose.yml"
+    state: started
+    detached: true
