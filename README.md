@@ -97,6 +97,8 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /m
 - Remove external in traefik ansible
 - Change immich file to docker root for .env
 - Check for ufw setup
+- Update docker setups
+- Check formatting disks !
 
 
 Check volumes immich and nextcloud
