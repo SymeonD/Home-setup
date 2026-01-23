@@ -13,12 +13,12 @@
 - name: Mount backup if not already mounted
   mount:
     path: /srv/backup
-    src: /dev/mapper/backup--vg-backup--lv
+    src: /dev/mapper/backup--vg-backup
     fstype: ext4  # seulement si tu es sûr du FS, sinon tu peux le retirer
     opts: defaults
     state: mounted
   when: backup_mounted.rc != 0
-  
+
 # -----------------------------
 # Docker LV et mount safe
 # -----------------------------
