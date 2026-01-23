@@ -1,16 +1,16 @@
 # Backup mount
-# - name: Create backup mount directory
-#   file:
-#     path: "{{ backup_root }}"
-#     state: directory
+- name: Create backup mount directory
+  file:
+    path: "{{ backup_root }}"
+    state: directory
 
-# - name: Create backup mounts
-#   mount:
-#     path: "{{ backup_root }}"
-#     src: /dev/sda1
-#     fstype: ext4
-#     opts: defaults
-#     state: mounted
+- name: Create backup mounts
+  mount:
+    path: "{{ backup_root }}"
+    src: /dev/sdb1
+    fstype: ext4
+    opts: defaults
+    state: mounted
 
 # Docker mount
 - name: Create mount point for Docker
