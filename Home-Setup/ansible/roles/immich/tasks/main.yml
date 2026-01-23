@@ -6,7 +6,7 @@
 
 - name: Create .env for Immich
   copy:
-    dest: /srv/immich/.env
+    dest: "{{ docker_root}}/immich/.env"
     content: |
       # === Immich ===
       IMMICH_VERSION=release
