@@ -9,7 +9,7 @@
     vg: backup-vg
     pvs: /dev/sdb1
 
-- name: Check if backup LV already exists
+- name: Check if backup LV exists
   command: lvs --noheadings -o lv_name backup-vg
   register: backup_lv_check
   failed_when: false
