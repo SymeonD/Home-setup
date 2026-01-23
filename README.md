@@ -92,3 +92,4 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /m
 - Change ansible command, remove -i localhost
 - Change ansible host to localhost, connection local
 - Change to include tasks for backup
+- Docker change ansible use to ansible user id
