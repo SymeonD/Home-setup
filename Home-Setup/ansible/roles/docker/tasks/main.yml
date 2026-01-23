@@ -1,48 +1,37 @@
 ---
-- name: Install prerequisite packages
-  apt:
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg
-      - lsb-release
-    state: present
-    update_cache: yes
+# Install Docker using official script
+- name: Install Docker using official script
+  shell: curl -fsSL https://get.docker.com | sh
+  args:
+    creates: /usr/bin/docker
 
-- name: Add Docker GPG key
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-
-- name: Add Docker repository
-  ansible.builtin.apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
-    state: present
-
-- name: Install Docker and Docker CLI
-  apt:
-    name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-    state: present
-    update_cache: yes
-
+# Install Docker Compose plugin (apt method)
 - name: Install Docker Compose plugin
   apt:
     name: docker-compose-plugin
     state: present
     update_cache: yes
 
-- name: Enable and start Docker service
+# Ensure Docker service is enabled and started
+- name: Enable and start Docker
   systemd:
     name: docker
+    enabled: yes
     state: started
-    enabled: true
 
-- name: Add current user to docker group
+# Add current user to docker group (so you can run without sudo)
+- name: Add user to docker group
   user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ ansible_user }}"
     groups: docker
     append: yes
+  when: ansible_user != "root"
+
+# Optional: Ensure docker command works
+- name: Check Docker version
+  command: docker --version
+  register: docker_version
+  changed_when: false
+
+- debug:
+    msg: "Docker installed: {{ docker_version.stdout }}"
