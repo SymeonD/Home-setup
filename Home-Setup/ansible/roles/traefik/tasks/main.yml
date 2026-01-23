@@ -32,4 +32,3 @@
   docker_compose:
     file: "{{ docker_root }}/traefik/docker-compose.yml"
     state: present
-    detached: true
