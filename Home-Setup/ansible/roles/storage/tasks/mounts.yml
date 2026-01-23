@@ -7,7 +7,7 @@
 - name: Create backup mounts
   mount:
     path: "{{ backup_root }}"
-    src: /dev/sdb1
+    src: /dev/backup_vg/backup_lv
     fstype: ext4
     opts: defaults
     state: mounted
