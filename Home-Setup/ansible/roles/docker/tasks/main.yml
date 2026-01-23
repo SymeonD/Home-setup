@@ -19,14 +19,6 @@
     enabled: yes
     state: started
 
-# Add current user to docker group (so you can run without sudo)
-- name: Add user to docker group
-  user:
-    name: "{{ ansible_user }}"
-    groups: docker
-    append: yes
-  when: ansible_user != "root"
-
 # Optional: Ensure docker command works
 - name: Check Docker version
   command: docker --version
