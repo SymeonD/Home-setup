@@ -1,14 +1,8 @@
-- name: Ensure pip3 is installed
+- name: Install Docker Python SDK via apt
   apt:
-    name: python3-pip
+    name: python3-docker
     state: present
     update_cache: yes
-
-- name: Ensure Docker SDK for Python is installed
-  pip:
-    name: docker
-    state: present
-    executable: pip3
 
 - name: Create Traefik directory
   file:
