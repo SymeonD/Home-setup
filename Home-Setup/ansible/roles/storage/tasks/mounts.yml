@@ -1,5 +1,5 @@
 # Backup mount
-- name: Create backup mount directory
+- name: Create backup mount directory exists
   file:
     path: "{{ backup_root }}"
     state: directory
@@ -7,7 +7,7 @@
 - name: Create backup mounts
   mount:
     path: "{{ backup_root }}"
-    src: /dev/backup_vg/backup_lv
+    src: /dev/backup-vg/backup-lv
     fstype: ext4
     opts: defaults
     state: mounted
