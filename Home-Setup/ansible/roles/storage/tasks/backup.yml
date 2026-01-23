@@ -18,6 +18,6 @@
 - name: Create backup LV if missing
   lvol:
     vg: backup-vg
-    lv: backup
+    lv: backup-lv
     size: 100%FREE
-  when: "'backup' not in backup_lv_check.stdout"
+  when: "'backup-lv' not in backup_lv_check.stdout"

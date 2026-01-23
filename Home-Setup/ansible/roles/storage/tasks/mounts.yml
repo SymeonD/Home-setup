@@ -7,12 +7,12 @@
 - name: Format backup LV if needed
   filesystem:
     fstype: ext4
-    dev: /dev/backup-vg/backup
+    dev: /dev/backup-vg/backup-lv
 
 - name: Mount backup LV if not already mounted
   mount:
     path: /srv/backup
-    src: /dev/backup-vg/backup
+    src: /dev/backup-vg/backup-lv
     fstype: auto
     opts: defaults
     state: mounted
