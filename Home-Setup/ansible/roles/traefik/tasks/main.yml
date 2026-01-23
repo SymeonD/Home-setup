@@ -31,5 +31,5 @@
 - name: Start Traefik
   docker_compose:
     file: "{{ docker_root }}/traefik/docker-compose.yml"
-    state: started
+    state: present
     detached: true
