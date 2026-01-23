@@ -9,7 +9,7 @@
 - name: Ensure the backup disk is mounted
   mount:
     path: /srv/backup
-    src: /dev/ubuntu-vg/backup-lv
+    src: /dev/backup-vg/backup-lv
     fstype: ext4
     state: mounted
     opts: defaults
