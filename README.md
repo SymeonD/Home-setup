@@ -89,3 +89,6 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /m
 
 # TODO for main
 - Change docker-vg to ubuntu-vg (use default one, created by boot)
+- Change ansible command, remove -i localhost
+- Change ansible host to localhost, connection local
+- Change to include tasks for backup
