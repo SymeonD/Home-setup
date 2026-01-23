@@ -49,14 +49,14 @@
 
 - name: Copy PostgreSQL backup script
   copy:
-    src: backup-postgres.sh
-    dest: /srv/backup/backup-scripts/backup-postgres.sh
+    src: backup_postgres.sh
+    dest: /srv/backup/backup-scripts/backup_postgres.sh
     mode: '0755'
 
 - name: Copy Restic backup script
   copy:
-    src: backup-restic.sh
-    dest: /srv/backup/backup-scripts/backup-restic.sh
+    src: backup_restic.sh
+    dest: /srv/backup/backup-scripts/backup_restic.sh
     mode: '0755'
   vars:
     restic_password: "{{ restic_password}}"
@@ -67,7 +67,7 @@
     user: root
     minute: 0
     hour: 2
-    job: "/srv/backup/backup-scripts/backup-postgres.sh >> /var/log/backup-postgres.log 2>&1"
+    job: "/srv/backup/backup-scripts/backup_postgres.sh >> /var/log/backup_postgres.log 2>&1"
     state: present
 
 - name: Create cron job for Restic backup
@@ -76,5 +76,5 @@
     user: root
     minute: 0
     hour: 4
-    job: "/srv/backup/backup-scripts/backup-restic.sh >> /var/log/backup-restic.log 2>&1"
+    job: "/srv/backup/backup-scripts/backup_restic.sh >> /var/log/backup_restic.log 2>&1"
     state: present
