@@ -4,18 +4,20 @@
     path: "{{ backup_root }}"
     state: directory
 
-- name: Format backup LV if needed
-  filesystem:
-    fstype: ext4
-    dev: /dev/backup-vg/backup-lv
+- name: Check if backup is already mounted
+  command: mountpoint -q /srv/backup
+  register: backup_mounted
+  failed_when: false
+  changed_when: false
 
-- name: Mount backup LV if not already mounted
+- name: Mount backup if not already mounted
   mount:
     path: /srv/backup
-    src: /dev/backup-vg/backup-lv
-    fstype: auto
+    src: /dev/mapper/backup--vg-backup--lv
+    fstype: ext4  # seulement si tu es sûr du FS, sinon tu peux le retirer
     opts: defaults
     state: mounted
+  when: backup_mounted.rc != 0
 
 # Docker mount
 - name: Create mount point for Docker
