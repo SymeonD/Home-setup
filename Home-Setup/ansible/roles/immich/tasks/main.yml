@@ -50,3 +50,8 @@
     src: docker-compose.yml
     dest: "{{ docker_root }}/immich/docker-compose.yml"
     mode: '0644'
+
+- name: Start Immich (using Docker Compose CLI v2)
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/immich"
