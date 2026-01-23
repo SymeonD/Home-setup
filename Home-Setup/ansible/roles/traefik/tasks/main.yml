@@ -1,3 +1,4 @@
+---
 - name: Create Traefik directory
   file:
     path: "{{ docker_root }}/traefik"
@@ -12,7 +13,7 @@
       DOMAIN=dealmeida.cloud
 
 - name: Ensure Traefik external network exists
-  docker_network:
+  community.docker.docker_network:
     name: traefik-net
     state: present
 
@@ -28,7 +29,7 @@
     dest: "{{ docker_root }}/traefik/traefik.yml"
     mode: '0644'
 
-- name: Start Traefik
-  docker_compose:
-    project_src: "{{ docker_root }}/traefik"
-    state: present
+- name: Start Traefik (using Docker Compose CLI v2)
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/traefik"
