@@ -27,16 +27,16 @@
   copy:
     dest: /etc/profile.d/restic.sh
     content: |
-      export RESTIC_REPOSITORY=/srv/backup/restic
+      export RESTIC_REPOSITORY=/srv/backup/restic-repo
       export RESTIC_PASSWORD="{{ restic_password}}"
     mode: '0644'
 
 - name: Create restic repository (if not exists)
   command: restic init
   args:
-    creates: /srv/backup/restic/config
+    creates: /srv/backup/restic-repo/config
   environment:
-    RESTIC_REPOSITORY: /srv/backup/restic
+    RESTIC_REPOSITORY: /srv/backup/restic-repo
     RESTIC_PASSWORD: "{{ restic_password}}"
 
 - name: Ensure backup scripts directory exists
