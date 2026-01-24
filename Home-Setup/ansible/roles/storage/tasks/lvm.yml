@@ -1,7 +1,7 @@
 - name: Create docker group
   lvg:
     vg: ubuntu-vg
-    pvs: /dev/sda3
+    pvs: /dev/nvme0n1p3
   register: vg_created
 
 - name: Create docker volume
