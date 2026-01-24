@@ -33,3 +33,8 @@
     src: docker-compose.yml
     dest: "{{ docker_root }}/nextcloud/docker-compose.yml"
     mode: '0644'
+
+- name: Start Nextcloud (using Docker Compose CLI v2)
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/nextcloud"

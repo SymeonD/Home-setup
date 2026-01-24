@@ -1,23 +1,29 @@
-- name: Install Docker
-  shell: |
-    curl -fsSL https://get.docker.com | sh
+---
+# Install Docker using official script
+- name: Install Docker using official script
+  shell: curl -fsSL https://get.docker.com | sh
   args:
     creates: /usr/bin/docker
 
-- name: Install docker-compose plugin
+# Install Docker Compose plugin (apt method)
+- name: Install Docker Compose plugin
   apt:
     name: docker-compose-plugin
     state: present
     update_cache: yes
 
-- name: Enable Docker
+# Ensure Docker service is enabled and started
+- name: Enable and start Docker
   systemd:
     name: docker
-    enabled: true
+    enabled: yes
     state: started
 
-- name: Add user to docker group
-  user:
-    name: "{{ ansible_user }}"
-    groups: docker
-    append: yes
+# Optional: Ensure docker command works
+- name: Check Docker version
+  command: docker --version
+  register: docker_version
+  changed_when: false
+
+- debug:
+    msg: "Docker installed: {{ docker_version.stdout }}"

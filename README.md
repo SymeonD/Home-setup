@@ -2,7 +2,7 @@
 Home setup for Immich + Nextcloud
 
 # Use
-ansible-playbook -i localhost, homelab.yml --ask-vault-pass
+ansible-playbook -i localhost, homelab.yml --ask-vault-pass --skip-tags init_backup
 
 
 ## Architecture
@@ -86,3 +86,19 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /m
 - Setup Postgres backup
 - Setup cron jobs
 - Setup aliases and bashrc
+
+# TODO for main
+- Change docker-vg to ubuntu-vg (use default one, created by boot)
+- Change ansible command, remove -i localhost
+- Change ansible host to localhost, connection local
+- Change to include tasks for backup
+- Docker change ansible use to ansible user id
+- README add --skip-tags to ansible start command
+- Remove external in traefik ansible
+- Change immich file to docker root for .env
+- Check for ufw setup (80 et 2283)
+- Update docker setups
+- Check formatting disks !
+
+
+Check volumes immich and nextcloud
