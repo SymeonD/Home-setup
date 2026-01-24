@@ -1,5 +1,6 @@
 - name: Homelab
-  hosts: all
+  hosts: localhost
+  connection: local
   # Makes ansible run as root
   become: true
   roles:
