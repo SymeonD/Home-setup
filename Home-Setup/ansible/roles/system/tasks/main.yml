@@ -4,5 +4,8 @@
 - name: System | Base packages
   import_tasks: packages.yml
 
+- name: System | Firewall
+  import_tasks: firewall.yml
+
 - name: System | Bashrc
   import_tasks: bashrc.yml
