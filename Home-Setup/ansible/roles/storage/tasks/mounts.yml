@@ -1,48 +1,92 @@
 # Backup mount
-- name: Create backup mount directory
+- name: Create backup mount directory exists
   file:
-    path: {{ backup_root }}
+    path: "{{ backup_root }}"
     state: directory
 
-- name: Create backup mounts
+- name: Check if backup is already mounted
+  command: mountpoint -q /srv/backup
+  register: backup_mounted
+  failed_when: false
+  changed_when: false
+
+- name: Mount backup if not already mounted
   mount:
-    path: {{ backup_root }}
-    src: /dev/sda1
+    path: /srv/backup
+    src: /dev/mapper/backup--vg-backup
+    fstype: ext4  # seulement si tu es sûr du FS, sinon tu peux le retirer
+    opts: defaults
+    state: mounted
+  when: backup_mounted.rc != 0
+
+# -----------------------------
+# Docker LV et mount safe
+# -----------------------------
+
+- name: Ensure Docker mount directory exists
+  file:
+    path: /var/lib/docker
+    state: directory
+
+- name: Check if Docker filesystem exists
+  command: blkid /dev/ubuntu-vg/docker
+  register: docker_fs
+  failed_when: false
+  changed_when: false
+
+- name: Format Docker LV if no filesystem
+  filesystem:
+    fstype: ext4
+    dev: /dev/ubuntu-vg/docker
+  when: docker_fs.rc != 0
+
+- name: Check if Docker LV already mounted
+  command: mountpoint -q /var/lib/docker
+  register: docker_mounted
+  failed_when: false
+  changed_when: false
+
+- name: Mount Docker LV if not mounted
+  mount:
+    path: /var/lib/docker
+    src: /dev/ubuntu-vg/docker
     fstype: ext4
     opts: defaults
     state: mounted
+  when: docker_mounted.rc != 0
 
-# Docker mount
-- name: Create mount point for Docker
-  file:
-    path: /var/lib/docker
-    state: directory
+# -----------------------------
+# Data LV et mount safe
+# -----------------------------
 
-- name: Format Docker LV if needed
-  filesystem:
-    fstype: ext4
-    dev: /dev/docker-vg/docker
-
-- name: Mount Docker LV
-  mount:
-    path: /var/lib/docker
-    src: /dev/docker-vg/docker
-    fstype: ext4
-    state: mounted
-
-- name: Create mount point for Data
+- name: Ensure Data mount directory exists
   file:
     path: /srv/data
     state: directory
 
-- name: Format Data LV if needed
+- name: Check if Data filesystem exists
+  command: blkid /dev/ubuntu-vg/data
+  register: data_fs
+  failed_when: false
+  changed_when: false
+
+- name: Format Data LV if no filesystem
   filesystem:
     fstype: ext4
-    dev: /dev/docker-vg/data
+    dev: /dev/ubuntu-vg/data
+  when: data_fs.rc != 0
 
-- name: Mount Data LV
+- name: Check if Data LV already mounted
+  command: mountpoint -q /srv/data
+  register: data_mounted
+  failed_when: false
+  changed_when: false
+
+- name: Mount Data LV if not mounted
   mount:
     path: /srv/data
-    src: /dev/docker-vg/data
+    src: /dev/ubuntu-vg/data
     fstype: ext4
+    opts: defaults
     state: mounted
+  when: data_mounted.rc != 0
