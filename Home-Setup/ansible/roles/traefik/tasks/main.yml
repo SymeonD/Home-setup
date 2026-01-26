@@ -26,7 +26,7 @@
 - name: Ensure acme.json exists with permissions
   file:
     path: "{{ docker_root }}/traefik/acme.json"
-    state: file
+    state: touch
     owner: root
     group: root
     mode: '0644'
