@@ -25,7 +25,7 @@
 
 - name: Ensure acme.json exists with permissions
   file:
-    path: /srv/data/traefik/acme.json
+    path: "{{ docker_root }}/traefik/acme.json"
     state: file
     owner: root
     group: root
