@@ -23,6 +23,14 @@
     dest: "{{ docker_root }}/traefik/docker-compose.yml"
     mode: '0644'
 
+- name: Ensure acme.json exists with permissions
+  file:
+    path: /srv/data/traefik/acme.json
+    state: file
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Deploy Traefik config
   copy:
     src: traefik.yml
