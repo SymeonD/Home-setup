@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export RESTIC_REPOSITORY=/mnt/backups/restic-repo
+export RESTIC_REPOSITORY=/srv/backup/restic-repo
 export RESTIC_PASSWORD="grouille123"
 
 # Initialiser le repo si nécessaire

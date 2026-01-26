@@ -66,10 +66,10 @@ HISTFILESIZE=2000
 - [ ] Put back HDD as backup
 
 Restore restic
-sudo restic -r /mnt/backups/restic-repo restore <snapshot_id>:srv/data/immich --target /srv/data/immich
+sudo restic -r /srv/backup/restic-repo restore <snapshot_id>:srv/data/immich --target /srv/data/immich
 
 Restore postgres
-docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /mnt/backups/postgres/<dump-date>/immich.dump
+docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /srv/backup/postgres/<dump-date>/immich.dump
 
 # Others
 - Ansible NAS (github)
