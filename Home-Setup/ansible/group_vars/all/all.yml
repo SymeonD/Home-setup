@@ -1,5 +1,7 @@
 docker_root: /opt/docker
 data_root: /srv/data
 backup_root: /srv/backup
+swap_file: /swapfile
+swap_size_mb: 16384
 
 timezone: Europe/Paris
