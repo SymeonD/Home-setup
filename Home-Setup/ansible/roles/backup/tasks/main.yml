@@ -54,12 +54,12 @@
     mode: '0755'
 
 - name: Copy Restic backup script
-  copy:
+  template:
     src: backup_restic.sh
     dest: /srv/backup/backup-scripts/backup_restic.sh
     mode: '0755'
-  vars:
-    restic_password: "{{ restic_password}}"
+    owner: root
+    group: root
 
 - name: Create cron job for PostgreSQL backup
   cron:

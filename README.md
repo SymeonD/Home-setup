@@ -88,4 +88,4 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /s
 - Setup aliases and bashrc
 
 # TODO for main
-- Add creation of acme.json in opt docker traefik and chmod 600
+- Add swap to the system (16g)
