@@ -52,6 +52,9 @@ fi
 docker compose -f /opt/docker/immich/docker-compose.yml down
 docker compose -f /opt/docker/nextcloud/docker-compose.yml down
 
+echo "Waiting for services to stop..."
+sleep 10
+
 ### 2. Restore files ###
 restic restore "$SNAPSHOT_IMMICH" \
   --target /srv/data/immich \
@@ -65,9 +68,12 @@ restic restore "$SNAPSHOT_NEXTCLOUD" \
 docker compose -f /opt/docker/immich/docker-compose.yml up -d immich-postgres
 docker compose -f /opt/docker/nextcloud/docker-compose.yml up -d nextcloud-postgres
 
+echo "Waiting for services to start..."
 sleep 3
 
 ### 4. Restore PostgreSQL ###
+
+# TODO: Remove volumes and recreate (remove before compose up -d postgres services)
 
 # docker exec -i immich-postgres psql -U immich <<EOF
 # DROP DATABASE IF EXISTS immich;
