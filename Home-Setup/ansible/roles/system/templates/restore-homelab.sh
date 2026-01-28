@@ -93,7 +93,7 @@ sleep 3
 
 gunzip --stdout "$PG_BASE/immich_dump.sql.gz" \
 | sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
-| docker exec -i immich_postgres psql --dbname=immich --username=immich  # Restore Backup
+| docker exec -i immich-postgres psql --dbname=postgres --username=immich  # Restore Backup
 
 # docker exec -i immich-postgres \
 #   pg_restore --username=immich --dbname=immich --clean --if-exists < "$PG_BASE/immich.dump"
