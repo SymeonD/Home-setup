@@ -15,4 +15,4 @@ nice -n 19 ionice -c2 -n7 restic backup --repo $RESTIC_REPO /srv/data/immich/ -v
 nice -n 19 ionice -c2 -n7 restic backup --repo $RESTIC_REPO /srv/data/nextcloud/ -v --tag nextcloud
 
 # Supprimer les snapshots vieux de plus de 30 jours
-restic forget --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune
+restic forget --repo $RESTIC_REPO --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune
