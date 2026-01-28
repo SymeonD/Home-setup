@@ -39,35 +39,13 @@
     RESTIC_REPOSITORY: /srv/backup/restic-repo
     RESTIC_PASSWORD: "{{ restic_password}}"
 
-- name: Ensure backup scripts directory exists
-  file:
-    path: /srv/backup/backup-scripts
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Copy PostgreSQL backup script
-  copy:
-    src: backup_postgres.sh
-    dest: /srv/backup/backup-scripts/backup_postgres.sh
-    mode: '0755'
-
-- name: Copy Restic backup script
-  template:
-    src: backup_restic.sh
-    dest: /srv/backup/backup-scripts/backup_restic.sh
-    mode: '0755'
-    owner: root
-    group: root
-
 - name: Create cron job for PostgreSQL backup
   cron:
     name: "Daily PostgreSQL backup"
     user: root
     minute: 0
     hour: 2
-    job: "/srv/backup/backup-scripts/backup_postgres.sh >> /var/log/backup_postgres.log 2>&1"
+    job: "backup-homelab-postgres >> /var/log/backup_postgres.log 2>&1"
     state: present
 
 - name: Create cron job for Restic backup
@@ -76,5 +54,5 @@
     user: root
     minute: 0
     hour: 4
-    job: "/srv/backup/backup-scripts/backup_restic.sh >> /var/log/backup_restic.log 2>&1"
+    job: "backup-homelab-restic >> /var/log/backup_restic.log 2>&1"
     state: present
