@@ -17,11 +17,25 @@ if [ "$DATE" = "latest" ]; then
   exit 1
 else
   SNAPSHOT_IMMICH=$(restic snapshots --json \
-    | jq -r ".[] | select(.time | startswith(\"$DATE\")) | select(.tags | index(\"immich\")) | .short_id" \
-    | head -n1)
+  | jq -r '
+      sort_by(.time)
+      | reverse
+      | .[]
+      | select(.time | startswith("'"$DATE"'"))
+      | select(.tags | index("immich"))
+      | .short_id
+    ' \
+  | head -n1)
 
   SNAPSHOT_NEXTCLOUD=$(restic snapshots --json \
-    | jq -r ".[] | select(.time | startswith(\"$DATE\")) | select(.tags | index(\"nextcloud\")) | .short_id" \
+    | jq -r '
+        sort_by(.time)
+        | reverse
+        | .[]
+        | select(.time | startswith("'"$DATE"'"))
+        | select(.tags | index("nextcloud"))
+        | .short_id
+      ' \
     | head -n1)
 fi
 
