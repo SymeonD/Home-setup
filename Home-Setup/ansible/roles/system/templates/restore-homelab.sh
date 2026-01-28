@@ -49,11 +49,14 @@ if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
 fi
 
 ### 1. Stop services ###
-docker compose -f /opt/docker/immich/docker-compose.yml down
-docker compose -f /opt/docker/nextcloud/docker-compose.yml down
+docker compose -f /opt/docker/immich/docker-compose.yml down -v
+docker compose -f /opt/docker/nextcloud/docker-compose.yml down -v
 
 echo "Waiting for services to stop..."
 sleep 10
+
+### 1.5 Clear data directories ###
+rm -rf /srv/data/postgres/immich/*
 
 ### 2. Restore files ###
 restic restore "$SNAPSHOT_IMMICH" \
@@ -65,7 +68,10 @@ restic restore "$SNAPSHOT_NEXTCLOUD" \
   --path /srv/data/nextcloud
 
 ### 3. Start PostgreSQL only ###
-docker compose -f /opt/docker/immich/docker-compose.yml up -d immich-postgres
+# docker compose -f /opt/docker/immich/docker-compose.yml up -d immich-postgres
+docker compose -f /opt/docker/immich/docker-compose.yml create
+docker start immich-postgres
+
 docker compose -f /opt/docker/nextcloud/docker-compose.yml up -d nextcloud-postgres
 
 echo "Waiting for services to start..."
@@ -85,11 +91,15 @@ sleep 3
 # CREATE DATABASE nextcloud;
 # EOF
 
-docker exec -i immich-postgres \
-  pg_restore --username=immich --dbname=immich --clean --if-exists < "$PG_BASE/immich.dump"
+gunzip --stdout "$PG_BASE/immich_dump.sql.gz" \
+| sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
+| docker exec -i immich_postgres psql --dbname=immich --username=immich  # Restore Backup
 
-docker exec -i nextcloud-postgres \
-  pg_restore --username=nc --dbname=nextcloud  --clean --if-exists < "$PG_BASE/nextcloud.dump"
+# docker exec -i immich-postgres \
+#   pg_restore --username=immich --dbname=immich --clean --if-exists < "$PG_BASE/immich.dump"
+
+# docker exec -i nextcloud-postgres \
+#   pg_restore --username=nc --dbname=nextcloud  --clean --if-exists < "$PG_BASE/nextcloud.dump"
 
 ### 5. Restart all ###
 docker compose -f /opt/docker/traefik/docker-compose.yml up -d
