@@ -69,15 +69,15 @@ sleep 3
 
 ### 4. Restore PostgreSQL ###
 
-docker exec -i immich-postgres psql -U postgres <<EOF
-DROP DATABASE IF EXISTS immich;
-CREATE DATABASE immich;
-EOF
+# docker exec -i immich-postgres psql -U immich <<EOF
+# DROP DATABASE IF EXISTS immich;
+# CREATE DATABASE immich;
+# EOF
 
-docker exec -i nextcloud-postgres psql -U postgres <<EOF
-DROP DATABASE IF EXISTS nextcloud;
-CREATE DATABASE nextcloud;
-EOF
+# docker exec -i nextcloud-postgres psql -U immich <<EOF
+# DROP DATABASE IF EXISTS nextcloud;
+# CREATE DATABASE nextcloud;
+# EOF
 
 docker exec -i immich-postgres \
   pg_restore --username=immich --dbname=immich --clean --if-exists < "$PG_BASE/immich.dump"
