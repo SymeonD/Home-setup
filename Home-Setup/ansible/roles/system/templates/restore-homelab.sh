@@ -57,6 +57,7 @@ sleep 10
 
 ### 1.5 Clear data directories ###
 rm -rf /srv/data/postgres/immich/*
+rm -rf /srv/data/postgres/nextcloud/*
 
 ### 2. Restore files ###
 restic restore "$SNAPSHOT_IMMICH" \
@@ -68,42 +69,28 @@ restic restore "$SNAPSHOT_NEXTCLOUD" \
   --path /srv/data/nextcloud
 
 ### 3. Start PostgreSQL only ###
-# docker compose -f /opt/docker/immich/docker-compose.yml up -d immich-postgres
 docker compose -f /opt/docker/immich/docker-compose.yml create
 docker start immich-postgres
 
-docker compose -f /opt/docker/nextcloud/docker-compose.yml up -d nextcloud-postgres
+docker compose -f /opt/docker/nextcloud/docker-compose.yml create
+docker start nextcloud-postgres
 
 echo "Waiting for services to start..."
 sleep 3
 
 ### 4. Restore PostgreSQL ###
-
-# TODO: Remove volumes and recreate (remove before compose up -d postgres services)
-
-# docker exec -i immich-postgres psql -U immich <<EOF
-# DROP DATABASE IF EXISTS immich;
-# CREATE DATABASE immich;
-# EOF
-
-# docker exec -i nextcloud-postgres psql -U immich <<EOF
-# DROP DATABASE IF EXISTS nextcloud;
-# CREATE DATABASE nextcloud;
-# EOF
-
 gunzip --stdout "$PG_BASE/immich_dump.sql.gz" \
 | sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
-| docker exec -i immich-postgres psql --dbname=postgres --username=immich  # Restore Backup
+| docker exec -i immich-postgres psql --dbname=immich --username=immich  # Restore Backup
 
-# docker exec -i immich-postgres \
-#   pg_restore --username=immich --dbname=immich --clean --if-exists < "$PG_BASE/immich.dump"
-
-# docker exec -i nextcloud-postgres \
-#   pg_restore --username=nc --dbname=nextcloud  --clean --if-exists < "$PG_BASE/nextcloud.dump"
+gunzip --stdout "$PG_BASE/nextcloud_dump.sql.gz" \
+| sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
+| docker exec -i nextcloud-postgres psql --dbname=nextcloud --username=nc  # Restore Backup
 
 ### 5. Restart all ###
 docker compose -f /opt/docker/traefik/docker-compose.yml up -d
 docker compose -f /opt/docker/immich/docker-compose.yml up -d
 docker compose -f /opt/docker/nextcloud/docker-compose.yml up -d
 
-echo "✅ Restore completed to $DATE"
+echo "=== ✅ RESTORE COMPLETED ($DATE) ==="
+
