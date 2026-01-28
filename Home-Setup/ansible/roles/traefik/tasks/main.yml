@@ -23,9 +23,16 @@
     dest: "{{ docker_root }}/traefik/docker-compose.yml"
     mode: '0644'
 
+- name: Create Traefik data directory
+  file:
+    path: "{{ data_root }}/traefik"
+    state: directory
+    mode: '0755'
+
 - name: Ensure acme.json exists with permissions
   file:
-    path: "{{ docker_root }}/traefik/acme.json"
+    # KEEP THIS FILE HERE
+    path: "{{ data_root }}/traefik/acme.json"
     state: touch
     owner: root
     group: root
