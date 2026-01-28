@@ -9,7 +9,7 @@ services:
     mem_reservation: 2g
     cpus: 2.5
     volumes:
-      - immich-library-data:/usr/src/app/upload
+      - /srv/data/immich/library:/usr/src/app/upload
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.immich.rule=Host(`immich.dealmeida.cloud`)"
@@ -45,7 +45,7 @@ services:
       POSTGRES_INITDB_ARGS: '--data-checksums'
     shm_size: 128mb
     volumes:
-      - immich-postgres-data:/var/lib/postgresql/data
+      - /srv/data/postgres/immich:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U immich"]
       interval: 5s
@@ -64,7 +64,7 @@ services:
     env_file:
       - .env
     volumes:
-      - immich-library-data:/usr/src/app/upload
+      - /srv/data/immich/library:/usr/src/app/upload
     command: ["start.sh", "microservices"]
     depends_on:  
       immich-postgres:
@@ -101,16 +101,3 @@ networks:
   immich-net:
     driver: bridge
 
-volumes:
-  immich-postgres-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /srv/data/postgres/immich
-      o: bind
-  immich-library-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /srv/data/immich/library
-      o: bind
