@@ -23,7 +23,7 @@ else
     | jq -r ".[] | select(.time | startswith(\"$DATE\")) | select(.tags | index(\"nextcloud\")) | .short_id" \
     | head -n1)
 
-  if [ "$SNAPSHOT_IMMICH" = ""] || [ "$SNAPSHOT_NEXTCLOUD" = "" ]; then
+  if [ "$SNAPSHOT_IMMICH" = "" || "$SNAPSHOT_NEXTCLOUD" = "" ]; then
     echo "❌ No restic snapshot found for date $DATE"
     exit 1
   fi
