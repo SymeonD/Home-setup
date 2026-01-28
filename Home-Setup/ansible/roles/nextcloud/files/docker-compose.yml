@@ -8,7 +8,7 @@ services:
     mem_reservation: 1g
     cpus: 2.0
     volumes:
-      - /srv/data/nextcloud/html:/var/www/html
+      - nextcloud-html-data:/var/www/html
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.DOMAIN_REDACTED`)"
@@ -38,7 +38,7 @@ services:
       POSTGRES_USER: nc
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - /srv/data/postgres/nextcloud:/var/lib/postgresql/data
+      - nextcloud-postgres-data:/var/lib/postgresql/data
     networks:
       - nextcloud-net
 
@@ -57,3 +57,17 @@ networks:
     external: true
   nextcloud-net:
     driver: bridge
+
+volumes:
+  nextcloud-html-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /srv/data/nextcloud/html
+      o: bind
+  nextcloud-postgres-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /srv/data/postgres/nextcloud
+      o: bind
