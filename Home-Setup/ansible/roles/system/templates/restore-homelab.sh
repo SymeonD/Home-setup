@@ -67,11 +67,21 @@ if [ ! -d "$PG_BASE" ]; then
   exit 1
 fi
 
+docker exec -it immich-postgres psql -U postgres <<EOF
+DROP DATABASE IF EXISTS immich;
+CREATE DATABASE immich;
+EOF
+
+docker exec -it nextcloud-postgres psql -U postgres <<EOF
+DROP DATABASE IF EXISTS nextcloud;
+CREATE DATABASE nextcloud;
+EOF
+
 docker exec -i immich-postgres \
-  pg_restore --username=immich --dbname=immich < "$PG_BASE/immich.dump"
+  pg_restore --username=immich --dbname=immich --clean --if-exists < "$PG_BASE/immich.dump"
 
 docker exec -i nextcloud-postgres \
-  pg_restore --username=nc --dbname=nextcloud < "$PG_BASE/nextcloud.dump"
+  pg_restore --username=nc --dbname=nextcloud  --clean --if-exists < "$PG_BASE/nextcloud.dump"
 
 ### 5. Restart all ###
 docker compose -f /opt/docker/traefik/docker-compose.yml up -d
