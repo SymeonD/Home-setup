@@ -1,6 +1,6 @@
 - name: Install homelab restore command
   template:
-    src: restore-homelab.sh.j2
+    src: restore-homelab.sh
     dest: /usr/local/bin/restore-homelab
     owner: root
     group: root
