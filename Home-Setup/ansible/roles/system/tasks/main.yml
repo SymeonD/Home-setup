@@ -10,5 +10,8 @@
 - name: System | Bashrc
   import_tasks: bashrc.yml
 
+- name: System | Services
+  import_tasks: services.yml
+
 - name: System | Swap
   import_tasks: swap.yml

@@ -88,4 +88,7 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /s
 - Setup aliases and bashrc
 
 # TODO for main
-- Add swap to the system (16g)
+- Créer commande pour restore bdd postgres
+- Créer commande pour restore restic
+- Créer commande pour arreter tous les conteneurs
+- Créer commande pour démarrer tous les conteneurs
