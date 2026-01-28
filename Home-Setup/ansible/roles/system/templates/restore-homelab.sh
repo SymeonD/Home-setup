@@ -7,6 +7,7 @@ export RESTIC_REPOSITORY="/srv/backup/restic-repo"
 export RESTIC_PASSWORD="{{ restic_password }}"
 export SNAPSHOT_IMMICH=""
 export SNAPSHOT_NEXTCLOUD=""
+export PG_BASE="/srv/backup/postgres/$DATE"
 
 echo "=== RESTORE HOMELAB ($DATE) ==="
 
@@ -22,15 +23,22 @@ else
   SNAPSHOT_NEXTCLOUD=$(restic snapshots --json \
     | jq -r ".[] | select(.time | startswith(\"$DATE\")) | select(.tags | index(\"nextcloud\")) | .short_id" \
     | head -n1)
+fi
 
-  if [ "$SNAPSHOT_IMMICH" = "" ] || [ "$SNAPSHOT_NEXTCLOUD" = "" ]; then
-    echo "❌ No restic snapshot found for date $DATE"
-    exit 1
-  fi
+### Check snapshots and pg backup exists ###
+if [ "$SNAPSHOT_IMMICH" = "" ] || [ "$SNAPSHOT_NEXTCLOUD" = "" ]; then
+echo "❌ No restic snapshot found for date $DATE"
+exit 1
+fi
+
+if [ ! -d "$PG_BASE" ]; then
+  echo "❌ PostgreSQL backup directory not found: $PG_BASE"
+  exit 1
 fi
 
 echo "Using immich restic snapshot: $SNAPSHOT_IMMICH"
 echo "Using nextcloud restic snapshot: $SNAPSHOT_NEXTCLOUD"
+echo "Using PostgreSQL backup: $PG_BASE"
 
 echo ""
 echo "⚠️  Are you sure you want to restore to $DATE?"
@@ -60,19 +68,13 @@ docker compose -f /opt/docker/nextcloud/docker-compose.yml up -d nextcloud-postg
 sleep 3
 
 ### 4. Restore PostgreSQL ###
-PG_BASE="/srv/backup/postgres/$DATE"
 
-if [ ! -d "$PG_BASE" ]; then
-  echo "❌ PostgreSQL backup directory not found: $PG_BASE"
-  exit 1
-fi
-
-docker exec -it immich-postgres psql -U postgres <<EOF
+docker exec -i immich-postgres psql -U postgres <<EOF
 DROP DATABASE IF EXISTS immich;
 CREATE DATABASE immich;
 EOF
 
-docker exec -it nextcloud-postgres psql -U postgres <<EOF
+docker exec -i nextcloud-postgres psql -U postgres <<EOF
 DROP DATABASE IF EXISTS nextcloud;
 CREATE DATABASE nextcloud;
 EOF
