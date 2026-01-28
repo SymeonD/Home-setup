@@ -88,7 +88,4 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /s
 - Setup aliases and bashrc
 
 # TODO for main
-- Créer commande pour restore bdd postgres
-- Créer commande pour restore restic
-- Créer commande pour arreter tous les conteneurs
-- Créer commande pour démarrer tous les conteneurs
+- Add snapshots date listing in restore script when nothing is found
