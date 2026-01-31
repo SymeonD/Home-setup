@@ -90,7 +90,7 @@ docker compose -f /opt/docker/nextcloud/docker-compose.yml create
 docker start nextcloud-postgres
 
 echo "Waiting for services to start..."
-sleep 3
+sleep 10
 
 ### 4. Restore PostgreSQL ###
 gunzip --stdout "$PG_BASE/immich_dump.sql.gz" \
