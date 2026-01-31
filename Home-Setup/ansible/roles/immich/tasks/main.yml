@@ -14,16 +14,18 @@
       # === Database ===
       DB_HOSTNAME=immich-postgres
       DB_PORT=5432
-      DB_USERNAME=immich
+      DB_USERNAME=postgres
       DB_PASSWORD={{ postgres_password }}
       DB_DATABASE_NAME=immich
+      #TODO: Check if not better to put it in data/immich to include it in restic
+      DB_DATA_LOCATION=/srv/data/postgres/immich
 
       # === Redis ===
       REDIS_HOST=redis
       REDIS_PORT=6379
 
       # === Upload ===
-      UPLOAD_LOCATION=/usr/src/app/upload
+      UPLOAD_LOCATION=/srv/data/immich
 
       # === Machine learning (CPU only) ===
       IMMICH_MACHINE_LEARNING_ENABLED=true

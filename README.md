@@ -96,3 +96,4 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /s
 
 # TODO tmrw
 - check nextcloud could not reliably determine the server's full qualified domain name
+- Add option --restic or --postgres to restore scripts
