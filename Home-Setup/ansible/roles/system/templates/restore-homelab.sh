@@ -75,11 +75,11 @@ rm -rf /srv/data/postgres/nextcloud/*
 
 ### 2. Restore files ###
 restic restore "$SNAPSHOT_IMMICH" \
-  --target /srv/data/immich \
+  --target / \
   --path /srv/data/immich
 
 restic restore "$SNAPSHOT_NEXTCLOUD" \
-  --target /srv/data/nextcloud \
+  --target / \
   --path /srv/data/nextcloud
 
 ### 3. Start PostgreSQL only ###
