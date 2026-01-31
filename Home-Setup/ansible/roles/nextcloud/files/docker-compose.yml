@@ -35,7 +35,7 @@ services:
     environment:
       POSTGRES_HOST: nextcloud-postgres
       POSTGRES_DB: nextcloud
-      POSTGRES_USER: nc
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - /srv/data/postgres/nextcloud:/var/lib/postgresql/data

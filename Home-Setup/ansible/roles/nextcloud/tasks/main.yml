@@ -16,7 +16,7 @@
       # === Database ===
       POSTGRES_HOST=nextcloud-postgres
       POSTGRES_DB=nextcloud
-      POSTGRES_USER=nc
+      POSTGRES_USER=postgres
       POSTGRES_PASSWORD={{ postgres_password }}
 
       # === Redis ===
