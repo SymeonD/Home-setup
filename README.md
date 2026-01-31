@@ -92,3 +92,7 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /s
 - Add ansible-setup-homelab command with password and parameters for ease of use
 - Add echo to backup scripts
 - Check if it should start all containers when setting up ansible (maybe better not to if creating new instance with restore intended)
+
+
+# TODO tmrw
+- check nextcloud could not reliably determine the server's full qualified domain name

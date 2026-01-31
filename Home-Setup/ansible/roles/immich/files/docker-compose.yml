@@ -9,7 +9,7 @@ services:
     mem_reservation: 2g
     cpus: 2.5
     volumes:
-      - /srv/data/immich/library:/usr/src/app/upload
+      - /srv/data/immich:/usr/src/app/upload
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.immich.rule=Host(`immich.dealmeida.cloud`)"
@@ -64,7 +64,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /srv/data/immich/library:/usr/src/app/upload
+      - /srv/data/immich:/usr/src/app/upload
     command: ["start.sh", "microservices"]
     depends_on:  
       immich-postgres:
