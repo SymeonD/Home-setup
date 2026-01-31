@@ -95,11 +95,11 @@ sleep 3
 ### 4. Restore PostgreSQL ###
 gunzip --stdout "$PG_BASE/immich_dump.sql.gz" \
 | sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
-| docker exec -i immich-postgres psql --dbname=immich --username=immich  # Restore Backup
+| docker exec -i immich-postgres psql --dbname=immich --username=postgres  # Restore Backup
 
 gunzip --stdout "$PG_BASE/nextcloud_dump.sql.gz" \
 | sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
-| docker exec -i nextcloud-postgres psql --dbname=nextcloud --username=nc  # Restore Backup
+| docker exec -i nextcloud-postgres psql --dbname=nextcloud --username=postgres  # Restore Backup
 
 ### 5. Restart all ###
 docker compose -f /opt/docker/traefik/docker-compose.yml up -d
