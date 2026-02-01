@@ -38,3 +38,30 @@
   shell: docker compose up -d
   args:
     chdir: "{{ docker_root }}/nextcloud"
+
+- name: Wait for Nextcloud config.php to be created
+  ansible.builtin.wait_for:
+    path: /srv/data/nextcloud/html/config/config.php
+    state: present
+    timeout: 120
+
+- name: Configure Nextcloud reverse proxy
+  ansible.builtin.blockinfile:
+    path: /srv/data/nextcloud/html/config/config.php
+    marker: "// {mark} ANSIBLE MANAGED NEXTCLOUD PROXY"
+    insertafter: "\\$CONFIG = array \\("
+    block: |
+      'trusted_proxies' => array (
+        0 => 'traefik',
+        1 => '172.18.0.0/16',
+      ),
+      'overwriteprotocol' => 'https',
+      'overwritehost' => 'nextcloud.dealmeida.cloud',
+      'overwrite.cli.url' => 'https://nextcloud.dealmeida.cloud',
+      'forwarded_for_headers' => ['HTTP_X_FORWARDED_FOR'],
+  register: nextcloud_config
+
+- name: Restart Nextcloud if config.php has changed
+  shell: docker compose restart nextcloud
+  when: nextcloud_config.changed
+
