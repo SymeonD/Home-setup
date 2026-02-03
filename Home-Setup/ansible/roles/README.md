@@ -1,4 +1,4 @@
-## Roles configuration
+# Roles configuration
 
 This directory contains Ansible roles that encapsulate specific configurations, tasks, and handlers. Roles allow for modular and reusable code, making it easier to manage complex playbooks by breaking them down into smaller, manageable components.
 
