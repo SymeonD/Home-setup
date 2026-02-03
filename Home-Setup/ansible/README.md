@@ -1,9 +1,9 @@
-#Ansible configuration
+# Ansible configuration
 
 This directory contains Ansible playbooks and configuration files used for automating the setup and management of systems.
 
 
-##Requirements
+## Requirements
 
 Ansible installed on the machine where the playbooks will be executed. <br>
 Command:
@@ -11,7 +11,7 @@ Command:
     sudo apt install ansible-core
 
 
-##Usage
+## Usage
 
 To run the Ansible playbooks, navigate to this directory and execute the desired playbook using the following command:
 
@@ -21,11 +21,11 @@ To run the Ansible playbooks, navigate to this directory and execute the desired
 
 Ensure that you have the necessary inventory file and configuration settings in place before executing the playbooks.
 
-##Directory Structure
+## Directory Structure
 - `homelab.yml`: Main Ansible playbook for setting up the homelab environment.
 - [`group_vars/`](./group_vars/README.md): Directory containing variable files for different host groups. Click to view details.
 - [`roles/`](./roles/README.md): Directory containing Ansible roles that encapsulate specific configurations and tasks. Click to view details.
 
-##Additional Information
+## Additional Information
 
 For more information on how to create and manage Ansible playbooks, refer to the [Ansible documentation](https://docs.ansible.com/).
