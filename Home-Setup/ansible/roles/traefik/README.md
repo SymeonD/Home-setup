@@ -18,3 +18,6 @@ Files included in this role, and their purpose:
 - `files/`: Directory for storing any static files that need to be copied to the target hosts.
   - [`traefik.yml`](./files/traefik.yml): Traefik configuration file, defining entry points, providers, and other settings for Traefik. Configures Traefik to work with Docker and sets up the dashboard. Change certificate resolver settings to staging when running tests to avoid hitting Let's Encrypt rate limits.
   - [`docker-compose.yml`](./files/docker-compose.yml): Docker Compose file for Traefik, defining the Traefik service and its configuration. Sets docker and data volumes.
+
+## Additional Information
+For more information on deploying Traefik and its configuration options, refer to the [Traefik documentation](https://doc.traefik.io/traefik/).
