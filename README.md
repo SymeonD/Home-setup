@@ -89,7 +89,7 @@ docker exec -i immich-postgres pg_restore --username=immich --dbname=immich < /s
 
 # TODO for main
 - Add snapshots date listing in restore script when nothing is found
-- Add ansible-setup-homelab command with password and parameters for ease of use
 - Add echo to backup scripts
 - Add option --restic or --postgres to restore scripts
+-- Check if backup are really being deleted after a while in postgres
 - Clean repo
