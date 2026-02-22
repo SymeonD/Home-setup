@@ -19,6 +19,14 @@ entryPoints:
         idleTimeout: 600s
         writeTimeout: 600s
 
+  minecraft:
+    address: ":25565"
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+        writeTimeout: 600s
+
 certificatesResolvers:
   letsencrypt:
    acme:

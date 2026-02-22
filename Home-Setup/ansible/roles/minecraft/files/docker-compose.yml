@@ -16,11 +16,13 @@ services:
       - "traefik.enable=true"
 
       # ROUTER TCP
-      - "traefik.tcp.routers.minecraft.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.minecraft.rule=HostSNI(`minecraft.dealmeida.cloud`)"
       - "traefik.tcp.routers.minecraft.entrypoints=minecraft"
-      - "traefik.tcp.services.minecraft.loadbalancer.server.port=25565"
+      - "traefik.tcp.routers.minecraft.service=minecraft"
+      - "traefik.tcp.routers.minecraft.tls=true"
+      - "traefik.tcp.routers.minecraft.tls.certresolver=letsencrypt"
 
-      - "traefik.docker.network=traefik-net"
+      - "traefik.tcp.services.minecraft.loadbalancer.server.port=25565"
 
     networks:
       - traefik-net
