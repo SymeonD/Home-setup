@@ -1,0 +1,30 @@
+services:
+  minecraft-server:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-server
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    volumes:
+      - "${UPLOAD_LOCATION}:/data"
+
+    labels:
+      - "traefik.enable=true"
+
+      # ROUTER TCP
+      - "traefik.tcp.routers.minecraft.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.minecraft.entrypoints=minecraft"
+      - "traefik.tcp.services.minecraft.loadbalancer.server.port=25565"
+
+      - "traefik.docker.network=traefik-net"
+
+    networks:
+      - traefik-net
+
+networks:
+  traefik-net:
+    external: true
