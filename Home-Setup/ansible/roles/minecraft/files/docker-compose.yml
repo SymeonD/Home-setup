@@ -6,6 +6,9 @@ services:
     stdin_open: true
     restart: unless-stopped
 
+    ports:
+      - "25565:25565"
+
     env_file:
       - .env
 
