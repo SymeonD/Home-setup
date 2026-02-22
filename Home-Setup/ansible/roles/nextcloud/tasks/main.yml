@@ -63,5 +63,7 @@
 
 - name: Restart Nextcloud if config.php has changed
   shell: docker compose restart nextcloud
+  args:
+    chdir: "{{ docker_root }}/nextcloud"
   when: nextcloud_config.changed
 
