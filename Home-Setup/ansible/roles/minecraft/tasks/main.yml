@@ -1,0 +1,35 @@
+- name: Create Minecraft directory
+  file:
+    path: "{{ docker_root }}/minecraft"
+    state: directory
+    mode: '0755'
+
+- name: Create .env for Minecraft
+  copy:
+    dest: "{{ docker_root }}/minecraft/.env"
+    content: |
+      # === Minecraft ===
+      EULA=TRUE
+      MEMORY=4096M
+      MOTD=The Family
+      ONLINE_MODE=false
+      USE_AIKAR_FLAGS=true
+      USE_MEOWICE_FLAGS=true
+      TZ=Europe/Paris
+      DIFFICULTY=2
+      SPAWN_PROTECTION=0
+      OPS=symeon2002
+
+      # === Upload ===
+      UPLOAD_LOCATION=/srv/data/minecraft
+
+- name: Deploy docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_root }}/minecraft/docker-compose.yml"
+    mode: '0644'
+
+- name: Start Minecraft
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/minecraft"
