@@ -18,7 +18,6 @@
       TZ=Europe/Paris
       DIFFICULTY=2
       SPAWN_PROTECTION=0
-      OPS=symeon2002
 
       # === Upload ===
       UPLOAD_LOCATION=/srv/data/minecraft
