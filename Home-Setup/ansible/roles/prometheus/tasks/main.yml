@@ -1,0 +1,24 @@
+- name: Create docker directory
+  file:
+    path: "{{ docker_root }}/prometheus"
+    state: directory
+
+- name: Create data directory
+  file:
+    path: /srv/data/monitoring/prometheus
+    state: directory
+
+- name: Copy docker compose
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_root }}/prometheus/docker-compose.yml"
+
+- name: Generate prometheus config
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ docker_root }}/prometheus/prometheus.yml"
+
+- name: Start prometheus stack (using Docker Compose CLI v2)
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/prometheus"
