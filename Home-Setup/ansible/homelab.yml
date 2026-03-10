@@ -7,6 +7,9 @@
     - system
     - storage
     - docker
+    - monitoring-collectors
+    - prometheus
+    - grafana
     - traefik
     - immich
     - nextcloud
