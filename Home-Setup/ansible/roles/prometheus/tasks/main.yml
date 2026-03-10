@@ -2,12 +2,22 @@
   file:
     path: "{{ docker_root }}/prometheus"
     state: directory
+    owner: "65534"
+    group: "65534"
     mode: "0755"
 
 - name: Create data directory
   file:
     path: /srv/data/monitoring/prometheus
     state: directory
+    mode: "0755"
+
+- name: Create data directory for loki
+  file:
+    path: /srv/data/monitoring/loki
+    state: directory
+    owner: "10001"
+    group: "10001"
     mode: "0755"
 
 - name: Copy docker compose
