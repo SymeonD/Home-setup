@@ -7,7 +7,7 @@
     - system
     - storage
     - docker
-    - monitoring-collectors
+    - monitoring_collectors
     - prometheus
     - grafana
     - traefik
