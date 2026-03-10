@@ -15,7 +15,7 @@
 
 - name: Copy datasource config
   copy:
-    src: provisioning/datasources/prometheus.yml
+    src: prometheus.yml
     dest: "{{ docker_root }}/grafana/prometheus.yml"
 
 - name: Start grafana (using Docker Compose CLI v2)
