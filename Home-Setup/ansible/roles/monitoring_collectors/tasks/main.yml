@@ -1,0 +1,26 @@
+- name: Create docker directory
+  file:
+    path: "{{ docker_root }}/monitoring-collectors"
+    state: directory
+    mode: "0755"
+
+- name: Create promtail data directory
+  file:
+    path: /srv/data/monitoring/promtail
+    state: directory
+    mode: "0755"
+
+- name: Copy docker compose
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_root }}/monitoring-collectors/docker-compose.yml"
+
+- name: Copy promtail config
+  copy:
+    src: promtail.yml
+    dest: "{{ docker_root }}/monitoring-collectors/promtail.yml"
+
+  name: Start monitoring stack (using Docker Compose CLI v2)
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/monitoring"
