@@ -2,11 +2,13 @@
   file:
     path: "{{ docker_root }}/prometheus"
     state: directory
+    mode: "0755"
 
 - name: Create data directory
   file:
     path: /srv/data/monitoring/prometheus
     state: directory
+    mode: "0755"
 
 - name: Copy docker compose
   copy:

@@ -2,11 +2,13 @@
   file:
     path: "{{ docker_root }}/grafana"
     state: directory
+    mode: "0755"
 
 - name: Create data directory
   file:
     path: /srv/data/monitoring/grafana
     state: directory
+    mode: "0755"
 
 - name: Copy docker compose
   copy:
