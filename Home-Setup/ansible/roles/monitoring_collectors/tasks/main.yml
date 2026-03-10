@@ -23,4 +23,4 @@
 - name: Start monitoring stack (using Docker Compose CLI v2)
   shell: docker compose up -d
   args:
-    chdir: "{{ docker_root }}/monitoring"
+    chdir: "{{ docker_root }}/monitoring-collectors"
