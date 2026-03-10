@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - /srv/data/monitoring/grafana:/var/lib/grafana
+      - /opt/docker/grafana/prometheus.yml:/etc/grafana/provisioning/datasources/prometheus.yml

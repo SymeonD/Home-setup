@@ -1,0 +1,24 @@
+- name: Create docker directory
+  file:
+    path: "{{ docker_root }}/grafana"
+    state: directory
+
+- name: Create data directory
+  file:
+    path: /srv/data/monitoring/grafana
+    state: directory
+
+- name: Copy docker compose
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_root }}/grafana/docker-compose.yml"
+
+- name: Copy datasource config
+  copy:
+    src: provisioning/datasources/prometheus.yml
+    dest: "{{ docker_root }}/grafana/prometheus.yml"
+
+- name: Start grafana (using Docker Compose CLI v2)
+  shell: docker compose up -d
+  args:
+    chdir: "{{ docker_root }}/grafana"
