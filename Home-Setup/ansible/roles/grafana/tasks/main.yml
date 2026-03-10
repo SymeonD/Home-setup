@@ -8,6 +8,8 @@
   file:
     path: /srv/data/monitoring/grafana
     state: directory
+    owner: 472
+    group: 472
     mode: "0755"
 
 - name: Copy docker compose
