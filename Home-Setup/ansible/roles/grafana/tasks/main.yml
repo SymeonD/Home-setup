@@ -4,24 +4,6 @@
     state: directory
     mode: "0755"
 
-- name: Create provisioning directory
-  file:
-    path: "{{ docker_root }}/grafana/provisioning"
-    state: directory
-    mode: "0755"
-
-- name: Create datasources directory
-  file:
-    path: "{{ docker_root }}/grafana/provisioning/datasources"
-    state: directory
-    mode: "0755"
-
-- name: Create dashboards directory
-  file:
-    path: "{{ docker_root }}/grafana/provisioning/dashboards"
-    state: directory
-    mode: "0755"
-
 - name: Create data directory
   file:
     path: /srv/data/monitoring/grafana
@@ -42,6 +24,7 @@
     owner: 472  # UID Grafana par défaut
     group: 472
     mode: "0644"
+    recursive: yes
     remote_src: yes
 
 - name: Copy provisioning dashboards
@@ -51,6 +34,7 @@
     owner: 472
     group: 472
     mode: "0644"
+    resurive: yes
     remote_src: yes
 
 - name: Start grafana (using Docker Compose CLI v2)
