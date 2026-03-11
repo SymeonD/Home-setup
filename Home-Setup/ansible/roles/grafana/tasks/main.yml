@@ -19,7 +19,7 @@
 
 - name: Copy provisioning datasources
   copy:
-    src: "provisioning/datasources/loki.yml"
+    src: "loki.yml"
     dest: "{{ docker_root }}/grafana/provisioning/datasources/loki.yml"
     owner: 472  # UID Grafana par défaut
     group: 472
@@ -28,7 +28,7 @@
 
 - name: Copy provisioning datasources
   copy:
-    src: "provisioning/datasources/prometheus.yml"
+    src: "prometheus.yml"
     dest: "{{ docker_root }}/grafana/provisioning/datasources/prometheus.yml"
     owner: 472  # UID Grafana par défaut
     group: 472
@@ -37,7 +37,7 @@
 
 - name: Copy provisioning dashboards
   copy:
-    src: "provisioning/dashboards/homelab-dashboard.json"
+    src: "homelab-dashboard.json"
     dest: "{{ docker_root }}/grafana/provisioning/dashboards/homelab-dashboard.json"
     owner: 472
     group: 472
