@@ -29,6 +29,7 @@ services:
 
     networks:
       - traefik-net
+      - monitoring-net
 
 networks:
   traefik-net:

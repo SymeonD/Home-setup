@@ -12,6 +12,9 @@ services:
     ports:
       - "9090:9090"
 
+    networks:
+      - monitoring-net
+
   loki:
     image: grafana/loki
     container_name: loki
@@ -22,3 +25,10 @@ services:
 
     ports:
       - "3100:3100"
+
+    networks:
+      - monitoring-net
+
+networks:
+  monitoring-net:
+    external: true

@@ -20,6 +20,11 @@
     src: promtail.yml
     dest: "{{ docker_root }}/monitoring-collectors/promtail.yml"
 
+- name: Ensure monitoring external network exists
+  community.docker.docker_network:
+    name: monitoring-net
+    state: present
+
 - name: Start monitoring stack (using Docker Compose CLI v2)
   shell: docker compose up -d
   args:
