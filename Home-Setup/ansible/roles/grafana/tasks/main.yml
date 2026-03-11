@@ -36,7 +36,6 @@
     owner: 472  # UID Grafana par défaut
     group: 472
     mode: "0644"
-    remote_src: yes
 
 - name: Copy provisioning datasources
   copy:
@@ -45,7 +44,6 @@
     owner: 472  # UID Grafana par défaut
     group: 472
     mode: "0644"
-    remote_src: yes
 
 - name: Copy provisioning dashboards
   copy:
@@ -54,7 +52,6 @@
     owner: 472
     group: 472
     mode: "0644"
-    remote_src: yes
 
 - name: Start grafana (using Docker Compose CLI v2)
   shell: docker compose up -d
