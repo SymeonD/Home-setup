@@ -101,4 +101,6 @@ networks:
     external: true
   immich-net:
     driver: bridge
+  monitoring-net:
+    external: true
 

@@ -58,3 +58,5 @@ networks:
     external: true
   nextcloud-net:
     driver: bridge
+  monitoring-net:
+    external: true
