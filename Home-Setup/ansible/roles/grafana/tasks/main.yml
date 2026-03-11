@@ -3,6 +3,18 @@
     path: "{{ docker_root }}/grafana"
     state: directory
     mode: "0755"
+
+- name: Create docker directory
+  file:
+    path: "{{ docker_root }}/grafana/provisioning"
+    state: directory
+    mode: "0755"
+
+- name: Create docker directory
+  file:
+    path: "{{ docker_root }}/grafana/provisioning/datasources"
+    state: directory
+    mode: "0755"
     
 - name: Create data directory
   file:
