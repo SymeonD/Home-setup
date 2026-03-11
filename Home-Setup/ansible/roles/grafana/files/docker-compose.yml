@@ -11,8 +11,14 @@ services:
       - "3000:3000"
 
     volumes:
+      # stockage des données de Grafana (dashboards sauvegardés, DB, plugins)
       - /srv/data/monitoring/grafana:/var/lib/grafana
-      - /opt/docker/grafana/prometheus.yml:/etc/grafana/provisioning/datasources/prometheus.yml
+
+      # provisioning complet des datasources
+      - /opt/docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+
+      # provisioning complet des dashboards
+      - /opt/docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
     
     networks:
       - monitoring-net

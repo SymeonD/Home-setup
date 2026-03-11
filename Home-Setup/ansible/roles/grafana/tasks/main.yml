@@ -17,10 +17,23 @@
     src: docker-compose.yml
     dest: "{{ docker_root }}/grafana/docker-compose.yml"
 
-- name: Copy datasource config
+- name: Copy provisioning datasources
   copy:
-    src: prometheus.yml
-    dest: "{{ docker_root }}/grafana/prometheus.yml"
+    src: "provisioning/datasources/"
+    dest: "{{ docker_root }}/grafana/provisioning/datasources/"
+    owner: 472  # UID Grafana par défaut
+    group: 472
+    mode: "0644"
+    remote_src: yes
+
+- name: Copy provisioning dashboards
+  copy:
+    src: "provisioning/dashboards/"
+    dest: "{{ docker_root }}/grafana/provisioning/dashboards/"
+    owner: 472
+    group: 472
+    mode: "0644"
+    remote_src: yes
 
 - name: Start grafana (using Docker Compose CLI v2)
   shell: docker compose up -d
