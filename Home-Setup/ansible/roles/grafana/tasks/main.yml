@@ -3,7 +3,7 @@
     path: "{{ docker_root }}/grafana"
     state: directory
     mode: "0755"
-
+    
 - name: Create data directory
   file:
     path: /srv/data/monitoring/grafana
@@ -19,22 +19,29 @@
 
 - name: Copy provisioning datasources
   copy:
-    src: "provisioning/datasources/"
-    dest: "{{ docker_root }}/grafana/provisioning/datasources/"
+    src: "provisioning/datasources/loki.yml"
+    dest: "{{ docker_root }}/grafana/provisioning/datasources/loki.yml"
     owner: 472  # UID Grafana par défaut
     group: 472
     mode: "0644"
-    recursive: yes
+    remote_src: yes
+
+- name: Copy provisioning datasources
+  copy:
+    src: "provisioning/datasources/prometheus.yml"
+    dest: "{{ docker_root }}/grafana/provisioning/datasources/prometheus.yml"
+    owner: 472  # UID Grafana par défaut
+    group: 472
+    mode: "0644"
     remote_src: yes
 
 - name: Copy provisioning dashboards
   copy:
-    src: "provisioning/dashboards/"
-    dest: "{{ docker_root }}/grafana/provisioning/dashboards/"
+    src: "provisioning/dashboards/homelab-dashboard.json"
+    dest: "{{ docker_root }}/grafana/provisioning/dashboards/homelab-dashboard.json"
     owner: 472
     group: 472
     mode: "0644"
-    resurive: yes
     remote_src: yes
 
 - name: Start grafana (using Docker Compose CLI v2)
