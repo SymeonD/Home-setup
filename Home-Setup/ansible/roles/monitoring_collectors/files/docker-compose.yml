@@ -1,5 +1,6 @@
-services:
+version: "3.9"
 
+services:
   node-exporter:
     image: prom/node-exporter
     container_name: node-exporter
@@ -18,13 +19,11 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
-
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
-
     networks:
       - monitoring-net
 
@@ -32,12 +31,10 @@ services:
     image: grafana/promtail
     container_name: promtail
     restart: unless-stopped
-
     volumes:
       - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /opt/docker/monitoring-collectors/promtail.yml:/etc/promtail/config.yml
-
     networks:
       - monitoring-net
 
