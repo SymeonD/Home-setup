@@ -10,6 +10,8 @@ services:
       - /:/host:ro,rslave
     command:
       - '--path.rootfs=/host'
+    networks:
+      - monitoring-net
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -24,6 +26,9 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
 
+    networks:
+      - monitoring-net
+
   promtail:
     image: grafana/promtail
     container_name: promtail
@@ -33,3 +38,10 @@ services:
       - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /opt/docker/monitoring-collectors/promtail.yml:/etc/promtail/config.yml
+
+    networks:
+      - monitoring-net
+
+networks:
+  monitoring-net:
+    external: true

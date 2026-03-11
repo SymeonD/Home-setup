@@ -22,6 +22,7 @@ services:
     networks:
       - traefik-net
       - nextcloud-net
+      - monitoring-net
 
   nextcloud-postgres:
     image: postgres:16
