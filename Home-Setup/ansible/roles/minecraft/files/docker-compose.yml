@@ -34,3 +34,5 @@ services:
 networks:
   traefik-net:
     external: true
+  monitoring-net:
+    external: true
