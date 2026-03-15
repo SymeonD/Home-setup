@@ -36,6 +36,8 @@ services:
     restart: unless-stopped
     environment:
       - .env
+    volumes:
+      - "${UPLOAD_LOCATION}:/minecraft"
     ports:
       - "9150:9150"
     networks:
