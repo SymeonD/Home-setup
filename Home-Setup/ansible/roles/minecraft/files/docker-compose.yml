@@ -34,6 +34,7 @@ services:
   minecraft-exporter:
     image: ghcr.io/dirien/minecraft-exporter:latest
     restart: unless-stopped
+    user: root
     environment:
       - .env
     volumes:
