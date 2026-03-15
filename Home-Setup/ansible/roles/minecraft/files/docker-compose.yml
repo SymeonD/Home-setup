@@ -31,6 +31,16 @@ services:
       - traefik-net
       - monitoring-net
 
+  minecraft-exporter:
+    image: ghcr.io/dirien/minecraft-exporter:latest
+    restart: unless-stopped
+    environment:
+      - .env
+    ports:
+      - "9150:9150"
+    networks:
+      - monitoring-net
+
 networks:
   traefik-net:
     external: true

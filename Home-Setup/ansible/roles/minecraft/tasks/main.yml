@@ -18,6 +18,12 @@
       TZ=Europe/Paris
       DIFFICULTY=2
       SPAWN_PROTECTION=0
+      ENABLE_RCON=true
+      RCON_PASSWORD={{ rcon_password }}
+      RCON_PORT=25575
+
+      # === Minecraft Exporter ===
+      RCON_HOST=minecraft-server
 
       # === Upload ===
       UPLOAD_LOCATION=/srv/data/minecraft
