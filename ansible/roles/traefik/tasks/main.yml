@@ -10,7 +10,7 @@
     dest: "{{ docker_root }}/traefik/.env"
     content: |
       # === Traefik ===
-      DOMAIN=dealmeida.cloud
+      DOMAIN={{ domain }}
 
 - name: Ensure Traefik external network exists
   community.docker.docker_network:
@@ -39,8 +39,8 @@
     mode: '0600'
 
 - name: Deploy Traefik config
-  copy:
-    src: traefik.yml
+  template:
+    src: traefik.yml.j2
     dest: "{{ docker_root }}/traefik/traefik.yml"
     mode: '0644'
 
