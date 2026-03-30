@@ -34,7 +34,17 @@
     dest: "{{ docker_root }}/minecraft/docker-compose.yml"
     mode: '0644'
 
-- name: Start Minecraft
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/minecraft"
+- name: Ensure Minecraft stack is deployed with docker_compose module
+  community.docker.docker_compose:
+    project_src: "{{ docker_root }}/minecraft"
+    state: present
+    restarted: false
+    pull: false
+    remove_orphans: true
+    recreate: false
+    build: false
+    scale: {}
+    timeout: 300
+    validate_certs: true
+    restart: true
+    stopped: false

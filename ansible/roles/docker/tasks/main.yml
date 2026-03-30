@@ -1,16 +1,19 @@
 ---
-# Install Docker using official script
-- name: Install Docker using official script
-  shell: curl -fsSL https://get.docker.com | sh
-  args:
-    creates: /usr/bin/docker
-
-# Install Docker Compose plugin (apt method)
-- name: Install Docker Compose plugin
+# Install Docker packages using the distro package manager for idempotence
+- name: Install Docker and related packages
   apt:
-    name: docker-compose-plugin
+    name:
+      - docker.io
+      - containerd.io
+      - docker-compose-plugin
     state: present
     update_cache: yes
+
+- name: Ensure Docker service is enabled and started
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
 
 # Ensure Docker service is enabled and started
 - name: Enable and start Docker

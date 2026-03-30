@@ -1,5 +1,33 @@
+# Generated and runtime data
 letsencrypt/
 data/
-library/
 acme.json
+
+# Ansible secrets (Vault should prefer .vault_pass and not store plain secrets)
+ansible/group_vars/all/vault.yml
+
+# Local env files and secret artifacts
+**/.env
+**/.env.local
+**/*.key
+**/*.pem
+**/*.crt
+**/*credentials*
+**/*secret*
+**/*passwd*
+
+# Containers and build artifacts
+library/
+/tmp/
+/var/tmp/
+
+# IDE and editor
+dotfiles
+.vscode/
+.idea/
+*.swp
+*.bak
+*.old
+
+# CLI tools
 .claude/

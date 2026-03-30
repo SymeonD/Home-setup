@@ -52,7 +52,17 @@
     dest: "{{ docker_root }}/immich/docker-compose.yml"
     mode: '0644'
 
-- name: Start Immich (using Docker Compose CLI v2)
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/immich"
+- name: Ensure Immich stack is deployed with docker_compose module
+  community.docker.docker_compose:
+    project_src: "{{ docker_root }}/immich"
+    state: present
+    restarted: false
+    pull: false
+    remove_orphans: true
+    recreate: false
+    build: false
+    scale: {}
+    timeout: 300
+    validate_certs: true
+    restart: true
+    stopped: false
