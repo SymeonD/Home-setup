@@ -2,3 +2,4 @@ letsencrypt/
 data/
 library/
 acme.json
+.claude/
