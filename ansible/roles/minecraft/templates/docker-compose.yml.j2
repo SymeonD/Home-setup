@@ -19,7 +19,7 @@ services:
       - "traefik.enable=true"
 
       # ROUTER TCP
-      - "traefik.tcp.routers.minecraft.rule=HostSNI(`minecraft.DOMAIN_REDACTED`)"
+      - "traefik.tcp.routers.minecraft.rule=HostSNI(`minecraft.{{ domain }}`)"
       - "traefik.tcp.routers.minecraft.entrypoints=minecraft"
       - "traefik.tcp.routers.minecraft.service=minecraft"
       - "traefik.tcp.routers.minecraft.tls=true"

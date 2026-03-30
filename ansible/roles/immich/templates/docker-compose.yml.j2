@@ -12,7 +12,7 @@ services:
       - ${UPLOAD_LOCATION}:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.immich.rule=Host(`immich.DOMAIN_REDACTED`)"
+      - "traefik.http.routers.immich.rule=Host(`immich.{{ domain }}`)"
       - "traefik.http.routers.immich.entrypoints=websecure"
       - "traefik.http.routers.immich.tls=true"
       - "traefik.http.routers.immich.tls.certresolver=letsencrypt"
@@ -67,7 +67,7 @@ services:
     volumes:
       - ${UPLOAD_LOCATION}:/data
     command: ["start.sh", "microservices"]
-    depends_on:  
+    depends_on:
       immich-postgres:
         condition: service_healthy
       redis:
@@ -103,4 +103,3 @@ networks:
     driver: bridge
   monitoring-net:
     external: true
-

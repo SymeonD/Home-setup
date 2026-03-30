@@ -30,19 +30,19 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
    acme:
-     email: EMAIL_REDACTED
+     email: {{ email }}
      storage: /acme.json
      httpChallenge:
        entryPoint: web
   # letsencrypt-staging:
   #   acme:
-  #     email: EMAIL_REDACTED
+  #     email: {{ email }}
   #     storage: /acme.json
   #     httpChallenge:
   #       entryPoint: web
   #     caServer: https://acme-staging-v02.api.letsencrypt.org/directory
   #     tlschallenge: true
-      
+
 providers:
   docker:
     exposedByDefault: false
