@@ -34,11 +34,11 @@
       JWT_SECRET={{ jwt_secret }}
 
       # === Domaine ===
-      DOMAIN=DOMAIN_REDACTED
-      EMAIL=EMAIL_REDACTED
+      DOMAIN={{ domain }}
+      EMAIL={{ email }}
 
-      IMMICH_SERVER_URL=https://immich.DOMAIN_REDACTED
-      IMMICH_WEB_URL=https://immich.DOMAIN_REDACTED
+      IMMICH_SERVER_URL=https://immich.{{ domain }}
+      IMMICH_WEB_URL=https://immich.{{ domain }}
 
 - name: Ensure Immich internal network
   docker_network:
@@ -47,8 +47,8 @@
     state: present
 
 - name: Deploy docker-compose.yml
-  copy:
-    src: docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
     dest: "{{ docker_root }}/immich/docker-compose.yml"
     mode: '0644'
 

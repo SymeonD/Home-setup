@@ -6,3 +6,6 @@ swap_file: /swapfile
 swap_size_mb: 12288
 
 timezone: Europe/Paris
+
+domain: "{{ vault_domain }}"
+email: "{{ vault_email }}"

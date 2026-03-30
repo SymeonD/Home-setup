@@ -9,7 +9,7 @@
     dest: "{{ docker_root }}/nextcloud/.env"
     content: |
       # === Nextcloud ===
-      NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.DOMAIN_REDACTED
+      NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.{{ domain }}
       NEXTCLOUD_ADMIN_USER={{ nextcloud_admin_user }}
       NEXTCLOUD_ADMIN_PASSWORD={{ nextcloud_admin_password }}
 
@@ -29,8 +29,8 @@
     state: present
 
 - name: Deploy docker-compose.yml
-  copy:
-    src: docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
     dest: "{{ docker_root }}/nextcloud/docker-compose.yml"
     mode: '0644'
 
@@ -56,8 +56,8 @@
         1 => '172.18.0.0/16',
       ),
       'overwriteprotocol' => 'https',
-      'overwritehost' => 'nextcloud.DOMAIN_REDACTED',
-      'overwrite.cli.url' => 'https://nextcloud.DOMAIN_REDACTED',
+      'overwritehost' => 'nextcloud.{{ domain }}',
+      'overwrite.cli.url' => 'https://nextcloud.{{ domain }}',
       'forwarded_for_headers' => ['HTTP_X_FORWARDED_FOR'],
   register: nextcloud_config
 
