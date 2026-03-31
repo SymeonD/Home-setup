@@ -6,7 +6,8 @@
 
 - name: Create .env for Immich
   copy:
-    dest: "{{ docker_root}}/immich/.env"
+    dest: "{{ docker_root }}/immich/.env"
+    mode: '0600'
     content: |
       # === Immich ===
       IMMICH_VERSION=release
@@ -41,7 +42,7 @@
       IMMICH_WEB_URL=https://immich.{{ domain }}
 
 - name: Ensure Immich internal network
-  docker_network:
+  community.docker.docker_network:
     name: immich-net
     driver: bridge
     state: present

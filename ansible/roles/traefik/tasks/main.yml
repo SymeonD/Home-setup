@@ -8,6 +8,7 @@
 - name: Create .env for Traefik
   copy:
     dest: "{{ docker_root }}/traefik/.env"
+    mode: '0600'
     content: |
       # === Traefik ===
       DOMAIN={{ domain }}
