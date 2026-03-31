@@ -40,7 +40,7 @@ services:
     volumes:
       - "${UPLOAD_LOCATION}:/minecraft"
     ports:
-      - "9150:9150"
+      - "127.0.0.1:9150:9150"
     networks:
       - monitoring-net
 

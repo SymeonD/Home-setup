@@ -49,12 +49,13 @@ Backup disk (LVM on /dev/sda)
 
 ## Prerequisites
 
-**Control machine:**
-- Ansible 2.17+
-- `community.docker` collection: `ansible-galaxy collection install community.docker`
-
-**Target server:**
+**On the server (runs locally via `connection: local`):**
 - Ubuntu 22.04 or 24.04 LTS (amd64)
+- Ansible 2.17+: `pip install ansible`
+- Required collections:
+  ```bash
+  ansible-galaxy collection install community.docker community.general ansible.posix
+  ```
 - 16 GB RAM minimum (32 GB recommended)
 - NVME/SSD disk with at minimum:
   - 100 GB root (`/`)
@@ -65,21 +66,19 @@ Backup disk (LVM on /dev/sda)
 
 ## Quick Start
 
+The playbook runs directly on the target server (`hosts: localhost`, `connection: local`). Clone and run it on the machine you want to provision.
+
 ```bash
-# Clone
+# On the target server
 git clone https://github.com/SymeonD/Home-setup.git
-cd Home-setup
+cd Home-setup/ansible
 
-# Configure your inventory
-cp ansible/inventory.example ansible/inventory
-# Edit ansible/inventory with your server IP/hostname
-
-# Configure variables
-cp ansible/group_vars/all/vault.yml.example ansible/group_vars/all/vault.yml
-ansible-vault encrypt ansible/group_vars/all/vault.yml
+# Create and populate the vault with your secrets
+ansible-vault create group_vars/all/vault.yml
+# See the vault variables table below for the required keys
 
 # Run
-ansible-playbook -i ansible/inventory ansible/homelab.yml --ask-vault-pass --ask-become-pass
+ansible-playbook homelab.yml --ask-vault-pass --ask-become
 ```
 
 ## Configuration
@@ -117,7 +116,6 @@ ansible-vault edit ansible/group_vars/all/vault.yml
 ```
 ansible/
 ├── homelab.yml                    # Main playbook (role execution order)
-├── inventory.example              # Inventory template
 ├── group_vars/all/
 │   ├── all.yml                    # Public variables
 │   └── vault.yml                  # Encrypted secrets
