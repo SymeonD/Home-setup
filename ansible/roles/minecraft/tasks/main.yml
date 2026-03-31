@@ -1,11 +1,11 @@
 - name: Create Minecraft directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/minecraft"
     state: directory
     mode: '0755'
 
 - name: Create .env for Minecraft
-  copy:
+  ansible.builtin.copy:
     dest: "{{ docker_root }}/minecraft/.env"
     mode: '0600'
     content: |
@@ -30,7 +30,7 @@
       UPLOAD_LOCATION=/srv/data/minecraft
 
 - name: Deploy docker-compose.yml
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ docker_root }}/minecraft/docker-compose.yml"
     mode: '0644'

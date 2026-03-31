@@ -1,5 +1,5 @@
 - name: Create bashrc aliases
-  copy:
+  ansible.builtin.copy:
     src: .bashrc
     dest: /root/.bashrc
     mode: '0644'

@@ -1,12 +1,12 @@
 ---
 - name: Create Traefik directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/traefik"
     state: directory
     mode: '0755'
 
 - name: Create .env for Traefik
-  copy:
+  ansible.builtin.copy:
     dest: "{{ docker_root }}/traefik/.env"
     mode: '0600'
     content: |
@@ -19,19 +19,19 @@
     state: present
 
 - name: Deploy docker-compose.yml
-  copy:
+  ansible.builtin.copy:
     src: docker-compose.yml
     dest: "{{ docker_root }}/traefik/docker-compose.yml"
     mode: '0644'
 
 - name: Create Traefik data directory
-  file:
+  ansible.builtin.file:
     path: "{{ data_root }}/traefik"
     state: directory
     mode: '0755'
 
 - name: Ensure acme.json exists with permissions
-  file:
+  ansible.builtin.file:
     # KEEP THIS FILE HERE
     path: "{{ data_root }}/traefik/acme.json"
     state: touch
@@ -40,7 +40,7 @@
     mode: '0600'
 
 - name: Deploy Traefik config
-  template:
+  ansible.builtin.template:
     src: traefik.yml.j2
     dest: "{{ docker_root }}/traefik/traefik.yml"
     mode: '0644'

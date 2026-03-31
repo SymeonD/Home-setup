@@ -1,11 +1,11 @@
 - name: Create n8n directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/n8n"
     state: directory
     mode: '0755'
 
 - name: Create data directory for n8n
-  file:
+  ansible.builtin.file:
     path: "{{ data_root }}/n8n"
     state: directory
     owner: "1000"
@@ -13,7 +13,7 @@
     mode: '0755'
 
 - name: Create .env for n8n
-  copy:
+  ansible.builtin.copy:
     dest: "{{ docker_root }}/n8n/.env"
     mode: '0600'
     content: |
@@ -29,7 +29,7 @@
       N8N_USER_FOLDER=/home/node/.n8n
 
 - name: Deploy docker-compose.yml
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ docker_root }}/n8n/docker-compose.yml"
     mode: '0644'

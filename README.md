@@ -14,6 +14,7 @@ Provisions and configures a personal homelab server with:
 | **Minecraft** | Family game server with metrics exporter |
 | **Prometheus + Loki** | Metrics and log aggregation |
 | **Grafana** | Monitoring dashboards (system + per-service) |
+| **n8n** | Self-hosted workflow automation |
 | **Restic + pg_dump** | Automated daily backups with retention policy |
 | **LVM** | Logical volume management for data and backup disks |
 
@@ -27,6 +28,7 @@ Internet
    │    traefik-net (Docker external network)
    ├──▶ [Immich :2283]         ── immich-net ──▶ [PostgreSQL] [Redis] [ML]
    ├──▶ [Nextcloud]            ── nextcloud-net ▶ [PostgreSQL] [Redis]
+   ├──▶ [n8n :5678]
    ├──▶ [Grafana :3000]
    └──▶ [Traefik dashboard]
 
@@ -105,6 +107,7 @@ timezone:    Europe/Paris
 | `nextcloud_admin_password` | Nextcloud initial admin |
 | `rcon_password` | Minecraft RCON + exporter |
 | `restic_password` | Restic backup repository |
+| `n8n_encryption_key` | n8n credentials encryption |
 
 To edit secrets:
 ```bash
@@ -127,6 +130,7 @@ ansible/
     ├── immich/                    # Photo management
     ├── nextcloud/                 # File storage
     ├── minecraft/                 # Game server
+    ├── n8n/                       # Workflow automation
     ├── monitoring_collectors/     # node-exporter, cAdvisor, Promtail
     ├── prometheus/                # Prometheus + Loki
     ├── grafana/                   # Dashboards (provisioned from JSON)
@@ -183,7 +187,7 @@ gunzip -c /srv/backup/postgres/2025-01-15/immich_dump.sql.gz \
 
 | Network | Type | Members |
 |---|---|---|
-| `traefik-net` | external | Traefik, Immich, Nextcloud, Grafana, Minecraft |
+| `traefik-net` | external | Traefik, Immich, Nextcloud, n8n, Grafana, Minecraft |
 | `immich-net` | bridge | immich-server, postgres, redis, ML |
 | `nextcloud-net` | bridge | nextcloud, postgres, redis |
 | `monitoring-net` | external | Prometheus, Loki, Grafana, node-exporter, cAdvisor, Promtail, minecraft-exporter |

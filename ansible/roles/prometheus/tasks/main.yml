@@ -1,5 +1,5 @@
 - name: Create docker directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/prometheus"
     state: directory
     owner: "65534"
@@ -7,13 +7,13 @@
     mode: "0755"
 
 - name: Create data directory
-  file:
+  ansible.builtin.file:
     path: /srv/data/monitoring/prometheus
     state: directory
     mode: "0755"
 
 - name: Create data directory for loki
-  file:
+  ansible.builtin.file:
     path: /srv/data/monitoring/loki
     state: directory
     owner: "10001"
@@ -21,12 +21,12 @@
     mode: "0755"
 
 - name: Copy docker compose
-  copy:
+  ansible.builtin.copy:
     src: docker-compose.yml
     dest: "{{ docker_root }}/prometheus/docker-compose.yml"
 
 - name: Generate prometheus config
-  template:
+  ansible.builtin.template:
     src: prometheus.yml.j2
     dest: "{{ docker_root }}/prometheus/prometheus.yml"
 

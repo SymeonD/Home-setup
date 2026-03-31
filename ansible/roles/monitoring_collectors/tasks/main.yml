@@ -1,22 +1,22 @@
 - name: Create docker directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/monitoring-collectors"
     state: directory
     mode: "0755"
 
 - name: Create promtail data directory
-  file:
+  ansible.builtin.file:
     path: /srv/data/monitoring/promtail
     state: directory
     mode: "0755"
 
 - name: Copy docker compose
-  copy:
+  ansible.builtin.copy:
     src: docker-compose.yml
     dest: "{{ docker_root }}/monitoring-collectors/docker-compose.yml"
 
 - name: Copy promtail config
-  copy:
+  ansible.builtin.copy:
     src: promtail.yml
     dest: "{{ docker_root }}/monitoring-collectors/promtail.yml"
 

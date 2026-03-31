@@ -1,11 +1,11 @@
 - name: Create docker directory
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/grafana"
     state: directory
     mode: "0755"
 
 - name: Create grafana provisioning directories
-  file:
+  ansible.builtin.file:
     path: "{{ docker_root }}/grafana/provisioning/{{ item }}"
     state: directory
     mode: "0755"
@@ -14,7 +14,7 @@
     - dashboards
 
 - name: Create data directory
-  file:
+  ansible.builtin.file:
     path: /srv/data/monitoring/grafana
     state: directory
     owner: 472
@@ -22,12 +22,12 @@
     mode: "0755"
 
 - name: Copy docker compose
-  copy:
+  ansible.builtin.copy:
     src: docker-compose.yml
     dest: "{{ docker_root }}/grafana/docker-compose.yml"
 
 - name: Copy provisioning datasources
-  copy:
+  ansible.builtin.copy:
     src: loki.yml
     dest: "{{ docker_root }}/grafana/provisioning/datasources/loki.yml"
     owner: 472  # UID Grafana par défaut
@@ -35,7 +35,7 @@
     mode: "0644"
 
 - name: Copy provisioning datasources
-  copy:
+  ansible.builtin.copy:
     src: prometheus.yml
     dest: "{{ docker_root }}/grafana/provisioning/datasources/prometheus.yml"
     owner: 472  # UID Grafana par défaut
@@ -43,7 +43,7 @@
     mode: "0644"
 
 - name: Copy provisioning dashboards
-  copy:
+  ansible.builtin.copy:
     src: homelab-dashboard.json
     dest: "{{ docker_root }}/grafana/provisioning/dashboards/homelab-dashboard.json"
     owner: 472

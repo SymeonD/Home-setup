@@ -1,5 +1,5 @@
 - name: Ensure backup mount point exists
-  file:
+  ansible.builtin.file:
     path: /srv/backup
     state: directory
     owner: root
@@ -7,7 +7,7 @@
     mode: '0755'
 
 - name: Ensure the backup disk is mounted
-  mount:
+  ansible.posix.mount:
     path: /srv/backup
     src: /dev/backup-vg/backup
     fstype: ext4
@@ -15,7 +15,7 @@
     opts: defaults
 
 - name: Install backup tools
-  apt:
+  ansible.builtin.apt:
     name:
       - restic
       - postgresql-client
@@ -24,7 +24,7 @@
     update_cache: yes
 
 - name: Ensure restic repository environment variable (no password)
-  copy:
+  ansible.builtin.copy:
     dest: /etc/profile.d/restic.sh
     content: |
       export RESTIC_REPOSITORY=/srv/backup/restic-repo
@@ -34,7 +34,7 @@
     mode: '0644'
 
 - name: Store restic password in root-only file
-  copy:
+  ansible.builtin.copy:
     dest: /root/.restic-password
     content: "{{ restic_password }}"
     owner: root
@@ -42,14 +42,14 @@
     mode: '0400'
 
 - name: Create restic repository (if not exists)
-  command: restic init --password-file /root/.restic-password
+  ansible.builtin.command: restic init --password-file /root/.restic-password
   args:
     creates: /srv/backup/restic-repo/config
   environment:
     RESTIC_REPOSITORY: /srv/backup/restic-repo
 
 - name: Create cron job for PostgreSQL backup
-  cron:
+  ansible.builtin.cron:
     name: "Daily PostgreSQL backup"
     user: root
     minute: 0
@@ -58,7 +58,7 @@
     state: present
 
 - name: Create cron job for Restic backup
-  cron:
+  ansible.builtin.cron:
     name: "Daily Restic backup"
     user: root
     minute: 0

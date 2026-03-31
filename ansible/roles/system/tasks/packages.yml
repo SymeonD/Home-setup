@@ -1,5 +1,5 @@
 - name: Install base packages
-  apt:
+  ansible.builtin.apt:
     name:
       - curl
       - ca-certificates

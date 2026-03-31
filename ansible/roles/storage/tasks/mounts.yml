@@ -1,17 +1,17 @@
 # Backup mount
 - name: Create backup mount directory exists
-  file:
+  ansible.builtin.file:
     path: "{{ backup_root }}"
     state: directory
 
 - name: Check if backup is already mounted
-  command: mountpoint -q /srv/backup
+  ansible.builtin.command: mountpoint -q /srv/backup
   register: backup_mounted
   failed_when: false
   changed_when: false
 
 - name: Mount backup if not already mounted
-  mount:
+  ansible.posix.mount:
     path: /srv/backup
     src: /dev/mapper/backup--vg-backup
     fstype: ext4  # seulement si tu es sûr du FS, sinon tu peux le retirer
@@ -24,30 +24,30 @@
 # -----------------------------
 
 - name: Ensure Docker mount directory exists
-  file:
+  ansible.builtin.file:
     path: /var/lib/docker
     state: directory
 
 - name: Check if Docker filesystem exists
-  command: blkid /dev/ubuntu-vg/docker
+  ansible.builtin.command: blkid /dev/ubuntu-vg/docker
   register: docker_fs
   failed_when: false
   changed_when: false
 
 - name: Format Docker LV if no filesystem
-  filesystem:
+  community.general.filesystem:
     fstype: ext4
     dev: /dev/ubuntu-vg/docker
   when: docker_fs.rc != 0
 
 - name: Check if Docker LV already mounted
-  command: mountpoint -q /var/lib/docker
+  ansible.builtin.command: mountpoint -q /var/lib/docker
   register: docker_mounted
   failed_when: false
   changed_when: false
 
 - name: Mount Docker LV if not mounted
-  mount:
+  ansible.posix.mount:
     path: /var/lib/docker
     src: /dev/ubuntu-vg/docker
     fstype: ext4
@@ -60,30 +60,30 @@
 # -----------------------------
 
 - name: Ensure Data mount directory exists
-  file:
+  ansible.builtin.file:
     path: /srv/data
     state: directory
 
 - name: Check if Data filesystem exists
-  command: blkid /dev/ubuntu-vg/data
+  ansible.builtin.command: blkid /dev/ubuntu-vg/data
   register: data_fs
   failed_when: false
   changed_when: false
 
 - name: Format Data LV if no filesystem
-  filesystem:
+  community.general.filesystem:
     fstype: ext4
     dev: /dev/ubuntu-vg/data
   when: data_fs.rc != 0
 
 - name: Check if Data LV already mounted
-  command: mountpoint -q /srv/data
+  ansible.builtin.command: mountpoint -q /srv/data
   register: data_mounted
   failed_when: false
   changed_when: false
 
 - name: Mount Data LV if not mounted
-  mount:
+  ansible.posix.mount:
     path: /srv/data
     src: /dev/ubuntu-vg/data
     fstype: ext4

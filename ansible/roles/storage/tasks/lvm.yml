@@ -1,18 +1,18 @@
 - name: Create docker group
-  lvg:
+  community.general.lvg:
     vg: ubuntu-vg
     pvs: /dev/nvme0n1p3
   register: vg_created
 
 - name: Create docker volume
-  lvol:
+  community.general.lvol:
     vg: ubuntu-vg
     lv: docker
     size: 50G
     state: present
 
 - name: Create data volume
-  lvol:
+  community.general.lvol:
     vg: ubuntu-vg
     lv: data
     size: 800G

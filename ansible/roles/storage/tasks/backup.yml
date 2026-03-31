@@ -1,22 +1,22 @@
 - name: Check if backup VG already exists
-  command: vgs backup-vg
+  ansible.builtin.command: vgs backup-vg
   register: backup_vg_check
   failed_when: false
   changed_when: false
 
 - name: Create backup VG
-  lvg:
+  community.general.lvg:
     vg: backup-vg
     pvs: /dev/sda1
 
 - name: Check if backup LV exists
-  command: lvs --noheadings -o lv_name backup-vg
+  ansible.builtin.command: lvs --noheadings -o lv_name backup-vg
   register: backup_lv_check
   failed_when: false
   changed_when: false
 
 - name: Create backup LV if missing
-  lvol:
+  community.general.lvol:
     vg: backup-vg
     lv: backup
     size: 100%FREE
