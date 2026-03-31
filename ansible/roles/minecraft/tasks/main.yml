@@ -35,6 +35,6 @@
     mode: '0644'
 
 - name: Start Minecraft
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/minecraft"
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/minecraft"
+    state: present

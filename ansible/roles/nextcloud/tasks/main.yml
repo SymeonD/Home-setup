@@ -34,10 +34,10 @@
     dest: "{{ docker_root }}/nextcloud/docker-compose.yml"
     mode: '0644'
 
-- name: Start Nextcloud (using Docker Compose CLI v2)
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/nextcloud"
+- name: Start Nextcloud
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/nextcloud"
+    state: present
 
 - name: Wait for Nextcloud config.php to be created
   ansible.builtin.wait_for:
@@ -62,8 +62,10 @@
   register: nextcloud_config
 
 - name: Restart Nextcloud if config.php has changed
-  shell: docker compose restart nextcloud
-  args:
-    chdir: "{{ docker_root }}/nextcloud"
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/nextcloud"
+    services:
+      - nextcloud
+    state: restarted
   when: nextcloud_config.changed
 

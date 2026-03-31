@@ -23,21 +23,30 @@
     state: present
     update_cache: yes
 
-- name: Ensure restic repo environment variables
+- name: Ensure restic repository environment variable (no password)
   copy:
     dest: /etc/profile.d/restic.sh
     content: |
       export RESTIC_REPOSITORY=/srv/backup/restic-repo
-      export RESTIC_PASSWORD="{{ restic_password}}"
+      export RESTIC_PASSWORD_FILE=/root/.restic-password
+    owner: root
+    group: root
     mode: '0644'
 
+- name: Store restic password in root-only file
+  copy:
+    dest: /root/.restic-password
+    content: "{{ restic_password }}"
+    owner: root
+    group: root
+    mode: '0400'
+
 - name: Create restic repository (if not exists)
-  command: restic init
+  command: restic init --password-file /root/.restic-password
   args:
     creates: /srv/backup/restic-repo/config
   environment:
     RESTIC_REPOSITORY: /srv/backup/restic-repo
-    RESTIC_PASSWORD: "{{ restic_password}}"
 
 - name: Create cron job for PostgreSQL backup
   cron:

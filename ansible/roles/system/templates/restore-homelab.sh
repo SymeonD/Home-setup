@@ -4,7 +4,7 @@ set -euo pipefail
 DATE=${1:-latest}
 
 export RESTIC_REPOSITORY="/srv/backup/restic-repo"
-export RESTIC_PASSWORD="{{ restic_password }}"
+export RESTIC_PASSWORD_FILE="/root/.restic-password"
 export SNAPSHOT_IMMICH=""
 export SNAPSHOT_NEXTCLOUD=""
 export PG_BASE="/srv/backup/postgres/$DATE"

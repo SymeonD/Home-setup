@@ -30,7 +30,7 @@
     src: prometheus.yml.j2
     dest: "{{ docker_root }}/prometheus/prometheus.yml"
 
-- name: Start prometheus stack (using Docker Compose CLI v2)
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/prometheus"
+- name: Start prometheus stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/prometheus"
+    state: present

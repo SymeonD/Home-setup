@@ -4,18 +4,15 @@
     state: directory
     mode: "0755"
 
-# - name: Create docker directory
-#   file:
-#     path: "{{ docker_root }}/grafana/provisioning"
-#     state: directory
-#     mode: "0755"
+- name: Create grafana provisioning directories
+  file:
+    path: "{{ docker_root }}/grafana/provisioning/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - datasources
+    - dashboards
 
-# - name: Create docker directory
-#   file:
-#     path: "{{ docker_root }}/grafana/provisioning/datasources"
-#     state: directory
-#     mode: "0755"
-    
 - name: Create data directory
   file:
     path: /srv/data/monitoring/grafana
@@ -53,7 +50,7 @@
     group: 472
     mode: "0644"
 
-- name: Start grafana (using Docker Compose CLI v2)
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/grafana"
+- name: Start grafana
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/grafana"
+    state: present

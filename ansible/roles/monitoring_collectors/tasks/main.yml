@@ -25,7 +25,7 @@
     name: monitoring-net
     state: present
 
-- name: Start monitoring stack (using Docker Compose CLI v2)
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/monitoring-collectors"
+- name: Start monitoring stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/monitoring-collectors"
+    state: present

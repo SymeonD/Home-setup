@@ -35,7 +35,7 @@ services:
     image: ghcr.io/dirien/minecraft-exporter:latest
     restart: unless-stopped
     user: root
-    environment:
+    env_file:
       - .env
     volumes:
       - "${UPLOAD_LOCATION}:/minecraft"

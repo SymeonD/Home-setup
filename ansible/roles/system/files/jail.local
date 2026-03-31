@@ -1,0 +1,16 @@
+[DEFAULT]
+# Ban for 1 hour by default
+bantime  = 3600
+# Time window to count failures
+findtime = 600
+# Max failures before ban
+maxretry = 5
+# Use systemd journal as backend
+backend  = systemd
+
+[sshd]
+enabled  = true
+port     = ssh
+# Stricter: 3 attempts, 24h ban
+maxretry = 3
+bantime  = 86400

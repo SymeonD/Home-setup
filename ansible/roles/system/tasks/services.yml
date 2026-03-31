@@ -4,21 +4,23 @@
     dest: /usr/local/bin/restore-homelab
     owner: root
     group: root
-    mode: '0755'
+    mode: '0700'
 
 - name: Install PostgreSQL backup script
   copy:
     src: backup_homelab_postgres.sh
     dest: /usr/local/bin/backup-homelab-postgres
-    mode: '0755'
+    owner: root
+    group: root
+    mode: '0700'
 
 - name: Install Restic backup script
   template:
     src: backup_homelab_restic.sh
     dest: /usr/local/bin/backup-homelab-restic
-    mode: '0755'
     owner: root
     group: root
+    mode: '0700'
 
 - name: Install homelab start command
   copy:

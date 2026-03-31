@@ -15,3 +15,6 @@
 
 - name: System | Swap
   import_tasks: swap.yml
+
+- name: System | Fail2ban
+  import_tasks: fail2ban.yml

@@ -1,0 +1,20 @@
+- name: Deploy fail2ban jail config
+  copy:
+    src: jail.local
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: '0644'
+  register: fail2ban_config
+
+- name: Enable and start fail2ban
+  systemd:
+    name: fail2ban
+    enabled: yes
+    state: started
+
+- name: Restart fail2ban if config changed
+  systemd:
+    name: fail2ban
+    state: restarted
+  when: fail2ban_config.changed

@@ -44,7 +44,7 @@
     dest: "{{ docker_root }}/traefik/traefik.yml"
     mode: '0644'
 
-- name: Start Traefik (using Docker Compose CLI v2)
-  shell: docker compose up -d
-  args:
-    chdir: "{{ docker_root }}/traefik"
+- name: Start Traefik
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/traefik"
+    state: present
