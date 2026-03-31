@@ -20,4 +20,5 @@
     vg: backup-vg
     lv: backup
     size: 100%FREE
-  when: "'backup' not in backup_lv_check.stdout"
+    shrink: false
+  when: backup_lv_check.rc != 0
