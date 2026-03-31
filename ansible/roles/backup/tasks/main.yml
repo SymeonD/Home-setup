@@ -48,20 +48,11 @@
   environment:
     RESTIC_REPOSITORY: /srv/backup/restic-repo
 
-- name: Create cron job for PostgreSQL backup
+- name: Create cron job for unified backup
   ansible.builtin.cron:
-    name: "Daily PostgreSQL backup"
+    name: "Daily homelab backup"
     user: root
     minute: 0
     hour: 2
-    job: "backup-homelab-postgres >> /var/log/backup_postgres.log 2>&1"
-    state: present
-
-- name: Create cron job for Restic backup
-  ansible.builtin.cron:
-    name: "Daily Restic backup"
-    user: root
-    minute: 0
-    hour: 4
-    job: "backup-homelab-restic >> /var/log/backup_restic.log 2>&1"
+    job: "backup-homelab >> /var/log/backup_homelab.log 2>&1"
     state: present
