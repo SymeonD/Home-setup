@@ -34,6 +34,4 @@ For more information on how to create and manage Ansible playbooks, refer to the
 - [ ] Create data directories via ansible instead of letting docker do it automatically, to set correct permissions and ownership.
 - [ ] Add snapshots date listing in restore script when nothing is found
 - [ ] Add echo to backup scripts
-- [ ] Add option --restic or --postgres to restore scripts
--- Check if backup are really being deleted after a while in postgres
-- [ ] Clean repo
+- [x] Clean repo
