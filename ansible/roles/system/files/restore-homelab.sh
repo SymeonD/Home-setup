@@ -5,9 +5,29 @@ DATE=${1:-}
 shift || true
 REQUESTED=("$@")
 
-if [ -z "$DATE" ] || [ "$DATE" = "latest" ]; then
+usage() {
   echo "Usage: $0 YYYY-MM-DD [SERVICE...]"
-  echo "Services: immich nextcloud n8n minecraft"
+  echo ""
+  echo "  YYYY-MM-DD  Date of the backup to restore (required)"
+  echo "  SERVICE...  One or more services to restore (optional, default: all)"
+  echo ""
+  echo "  Available services: immich  nextcloud  n8n  minecraft"
+  echo ""
+  echo "Examples:"
+  echo "  $0 2024-01-15                        # Restore everything"
+  echo "  $0 2024-01-15 immich                 # Restore immich only"
+  echo "  $0 2024-01-15 nextcloud minecraft    # Restore two services"
+}
+
+if [ -z "$DATE" ]; then
+  usage
+  exit 1
+fi
+
+if [[ ! "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+  echo "❌ Invalid date format: '$DATE' (expected YYYY-MM-DD)"
+  echo ""
+  usage
   exit 1
 fi
 

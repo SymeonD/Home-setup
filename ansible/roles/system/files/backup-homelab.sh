@@ -45,8 +45,10 @@ else
   SERVICES=()
   for svc in "${REQUESTED[@]}"; do
     if [[ ! " ${ALL_SERVICES[*]} " =~ " ${svc} " ]]; then
-      echo "❌ Unknown service: $svc"
-      echo "Valid services: ${ALL_SERVICES[*]}"
+      echo "❌ Unknown service: '$svc'"
+      echo ""
+      echo "Available services: ${ALL_SERVICES[*]}"
+      echo "Usage: $0 [SERVICE...]"
       exit 1
     fi
     SERVICES+=("$svc")
