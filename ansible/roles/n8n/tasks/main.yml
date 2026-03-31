@@ -1,0 +1,40 @@
+- name: Create n8n directory
+  file:
+    path: "{{ docker_root }}/n8n"
+    state: directory
+    mode: '0755'
+
+- name: Create data directory for n8n
+  file:
+    path: "{{ data_root }}/n8n"
+    state: directory
+    owner: "1000"
+    group: "1000"
+    mode: '0755'
+
+- name: Create .env for n8n
+  copy:
+    dest: "{{ docker_root }}/n8n/.env"
+    mode: '0600'
+    content: |
+      # === n8n ===
+      N8N_HOST=n8n.{{ domain }}
+      N8N_PORT=5678
+      N8N_PROTOCOL=https
+      WEBHOOK_URL=https://n8n.{{ domain }}/
+      N8N_ENCRYPTION_KEY={{ n8n_encryption_key }}
+      N8N_SECURE_COOKIE=true
+
+      # === Data ===
+      N8N_USER_FOLDER=/home/node/.n8n
+
+- name: Deploy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_root }}/n8n/docker-compose.yml"
+    mode: '0644'
+
+- name: Start n8n
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/n8n"
+    state: present
