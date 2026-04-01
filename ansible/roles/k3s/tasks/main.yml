@@ -43,8 +43,10 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ playbook_dir }}/../k8s/storage/local-path-config.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply namespaces
   kubernetes.core.k8s:
     state: present
     src: "{{ playbook_dir }}/../k8s/namespaces/namespaces.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
