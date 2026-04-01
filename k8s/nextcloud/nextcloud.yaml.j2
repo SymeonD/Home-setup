@@ -19,6 +19,13 @@ spec:
           image: redis:7
           ports:
             - containerPort: 6379
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service
@@ -63,6 +70,13 @@ spec:
                   key: POSTGRES_PASSWORD
           ports:
             - containerPort: 5432
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "1500m"
+              memory: "2Gi"
           volumeMounts:
             - name: pgdata
               mountPath: /var/lib/postgresql/data
@@ -108,6 +122,13 @@ spec:
                 name: nextcloud-secrets
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "2000m"
+              memory: "3Gi"
           volumeMounts:
             - name: html
               mountPath: /var/www/html

@@ -47,6 +47,13 @@ spec:
           ports:
             - containerPort: 25565
             - containerPort: 25575
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2500m"
+              memory: "5Gi"
           volumeMounts:
             - name: data
               mountPath: /data
@@ -66,6 +73,13 @@ spec:
                   key: RCON_PASSWORD
           ports:
             - containerPort: 9150
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
           volumeMounts:
             - name: data
               mountPath: /minecraft
