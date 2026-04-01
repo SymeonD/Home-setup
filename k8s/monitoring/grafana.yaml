@@ -107,7 +107,7 @@ spec:
         fsGroup: 472
       containers:
         - name: grafana
-          image: grafana/grafana
+          image: grafana/grafana:11.3.0
           ports:
             - containerPort: 3000
           resources:
@@ -117,6 +117,18 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
           volumeMounts:
             - name: data
               mountPath: /var/lib/grafana

@@ -16,7 +16,7 @@ spec:
       hostNetwork: true
       containers:
         - name: node-exporter
-          image: prom/node-exporter
+          image: prom/node-exporter:v1.8.2
           args:
             - --path.rootfs=/host
           ports:
@@ -29,6 +29,18 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9100
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9100
+            initialDelaySeconds: 5
+            periodSeconds: 30
           volumeMounts:
             - name: root
               mountPath: /host

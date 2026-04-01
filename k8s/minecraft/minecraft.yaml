@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: minecraft
-          image: itzg/minecraft-server:latest
+          image: itzg/minecraft-server:2025.1.0
           tty: true
           stdin: true
           envFrom:
@@ -54,13 +54,23 @@ spec:
             limits:
               cpu: "2500m"
               memory: "5Gi"
+          readinessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 120
+            periodSeconds: 15
+            failureThreshold: 5
+          livenessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 180
+            periodSeconds: 30
+            failureThreshold: 3
           volumeMounts:
             - name: data
               mountPath: /data
         - name: minecraft-exporter
-          image: ghcr.io/dirien/minecraft-exporter:latest
-          securityContext:
-            runAsUser: 0
+          image: ghcr.io/dirien/minecraft-exporter:0.14.0
           env:
             - name: RCON_HOST
               value: "localhost"
@@ -80,6 +90,18 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 9150
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 9150
+            initialDelaySeconds: 30
+            periodSeconds: 30
           volumeMounts:
             - name: data
               mountPath: /minecraft
