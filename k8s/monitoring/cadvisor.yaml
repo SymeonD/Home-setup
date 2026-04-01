@@ -12,6 +12,7 @@ spec:
       labels:
         app: cadvisor
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: cadvisor
           image: gcr.io/cadvisor/cadvisor:latest
@@ -23,6 +24,7 @@ spec:
               readOnly: true
             - name: var-run
               mountPath: /var/run
+              readOnly: true
             - name: sys
               mountPath: /sys
               readOnly: true
