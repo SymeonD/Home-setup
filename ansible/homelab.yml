@@ -6,9 +6,7 @@
   roles:
     - system
     - storage
-    - docker
     - k3s
-    - k3s_secrets
     - monitoring_k8s
     - traefik_k8s
     - immich_k8s

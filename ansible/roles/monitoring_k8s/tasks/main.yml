@@ -53,12 +53,3 @@
     src: "{{ playbook_dir }}/../k8s/monitoring/grafana.yaml"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
-- name: Stop Docker monitoring stack
-  community.docker.docker_compose_v2:
-    project_src: "{{ docker_root }}/{{ item }}"
-    state: absent
-  loop:
-    - prometheus
-    - grafana
-    - monitoring-collectors
-  ignore_errors: true

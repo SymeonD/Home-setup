@@ -49,8 +49,3 @@
     cmd: kubectl rollout status deployment/traefik -n traefik --timeout=120s
   changed_when: false
 
-- name: Stop Docker Traefik
-  community.docker.docker_compose_v2:
-    project_src: "{{ docker_root }}/traefik"
-    state: absent
-  ignore_errors: true
