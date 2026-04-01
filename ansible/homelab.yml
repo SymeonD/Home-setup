@@ -9,9 +9,7 @@
     - docker
     - k3s
     - k3s_secrets
-    - monitoring_collectors
-    - prometheus
-    - grafana
+    - monitoring_k8s
     - traefik
     - immich
     - nextcloud

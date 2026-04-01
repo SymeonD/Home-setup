@@ -1,0 +1,64 @@
+- name: Ensure grafana-dashboards directory exists
+  ansible.builtin.file:
+    path: /srv/data/monitoring/grafana-dashboards
+    state: directory
+    owner: 472
+    group: 472
+    mode: "0755"
+
+- name: Copy Grafana dashboards
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /srv/data/monitoring/grafana-dashboards/
+    owner: 472
+    group: 472
+    mode: "0644"
+  loop:
+    - "{{ playbook_dir }}/../ansible/roles/grafana/files/homelab-dashboard.json"
+    - "{{ playbook_dir }}/../ansible/roles/grafana/files/homelab-human-dashboard.json"
+
+- name: Apply node-exporter DaemonSet
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/monitoring/node-exporter.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Apply cadvisor DaemonSet
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/monitoring/cadvisor.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Apply Prometheus
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/monitoring/prometheus.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Apply Loki
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/monitoring/loki.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Apply Promtail DaemonSet
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/monitoring/promtail.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Apply Grafana
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/monitoring/grafana.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Stop Docker monitoring stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/{{ item }}"
+    state: absent
+  loop:
+    - prometheus
+    - grafana
+    - monitoring-collectors
+  ignore_errors: true
