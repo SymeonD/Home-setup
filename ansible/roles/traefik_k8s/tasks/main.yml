@@ -30,6 +30,27 @@
     src: "{{ playbook_dir }}/../k8s/traefik/deployment.yaml"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
+- name: Delete transitional ExternalName services (type immutable, must recreate)
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    definition:
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          name: immich-docker
+          namespace: traefik
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          name: nextcloud-docker
+          namespace: traefik
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          name: n8n-docker
+          namespace: traefik
+
 - name: Apply Traefik IngressRoutes
   kubernetes.core.k8s:
     state: present
