@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: minecraft
-          image: itzg/minecraft-server:2025.1.0
+          image: itzg/minecraft-server:2026.3.3
           tty: true
           stdin: true
           envFrom:
@@ -27,7 +27,7 @@ spec:
             - name: EULA
               value: "TRUE"
             - name: VERSION
-              value: "1.21.11"
+              value: "26.1.1"
             - name: MEMORY
               value: "4096M"
             - name: MOTD
