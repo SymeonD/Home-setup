@@ -1,0 +1,40 @@
+- name: Check if K3s is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s
+  register: k3s_binary
+
+- name: Install K3s
+  ansible.builtin.shell:
+    cmd: curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik --write-kubeconfig-mode 644" sh -
+  when: not k3s_binary.stat.exists
+  changed_when: true
+
+- name: Wait for K3s node to be ready
+  ansible.builtin.command:
+    cmd: kubectl get nodes
+  register: k3s_nodes
+  until: k3s_nodes.rc == 0 and 'Ready' in k3s_nodes.stdout
+  retries: 20
+  delay: 10
+  changed_when: false
+
+- name: Wait for local-path-provisioner to be ready
+  ansible.builtin.command:
+    cmd: kubectl rollout status deployment/local-path-provisioner -n local-path-storage --timeout=120s
+  changed_when: false
+
+- name: Ensure /srv/data/k8s-volumes directory exists
+  ansible.builtin.file:
+    path: /srv/data/k8s-volumes
+    state: directory
+    mode: '0755'
+
+- name: Apply local-path-provisioner storage config
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/storage/local-path-config.yaml"
+
+- name: Apply namespaces
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ playbook_dir }}/../k8s/namespaces/namespaces.yaml"

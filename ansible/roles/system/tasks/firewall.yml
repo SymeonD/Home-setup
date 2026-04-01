@@ -37,6 +37,12 @@
     port: '25565'
     proto: tcp
 
+- name: Allow Flannel/K3s pod traffic (DEFAULT_FORWARD_POLICY)
+  ansible.builtin.lineinfile:
+    path: /etc/default/ufw
+    regexp: '^DEFAULT_FORWARD_POLICY='
+    line: 'DEFAULT_FORWARD_POLICY="ACCEPT"'
+
 - name: Enable UFW
   community.general.ufw:
     state: enabled

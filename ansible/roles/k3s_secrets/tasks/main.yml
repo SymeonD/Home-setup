@@ -1,0 +1,6 @@
+# K3s secrets role — bridges Ansible Vault values to Kubernetes Secrets
+# via kubernetes.core.k8s with stringData (values never written to disk).
+# Secrets will be added here in Phase 4 (n8n, Minecraft) and Phase 5 (Nextcloud, Immich).
+- name: K3s secrets — nothing to do yet
+  ansible.builtin.debug:
+    msg: "k3s_secrets role: no secrets configured yet (Phase 4+)"

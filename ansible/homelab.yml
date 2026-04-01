@@ -7,6 +7,8 @@
     - system
     - storage
     - docker
+    - k3s
+    - k3s_secrets
     - monitoring_collectors
     - prometheus
     - grafana
