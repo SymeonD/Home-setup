@@ -34,6 +34,7 @@
     state: present
     template: "{{ playbook_dir }}/../k8s/immich/immich.yaml.j2"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
+    force: true
 
 - name: Remove immich transitional resources from traefik namespace
   kubernetes.core.k8s:
