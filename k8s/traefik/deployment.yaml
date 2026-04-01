@@ -43,10 +43,8 @@ data:
             entryPoint: web
 
     providers:
-      kubernetesCRD:
-        allowExternalNameServices: true
-      kubernetesIngress:
-        allowExternalNameServices: true
+      kubernetesCRD: {}
+      kubernetesIngress: {}
 ---
 apiVersion: apps/v1
 kind: Deployment

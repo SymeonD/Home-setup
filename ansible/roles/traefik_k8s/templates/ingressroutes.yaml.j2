@@ -35,6 +35,26 @@ spec:
     certResolver: letsencrypt
 ---
 # --- Immich (Docker transitoire → IP host) ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-docker
+  namespace: traefik
+spec:
+  ports:
+    - port: 2283
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: immich-docker
+  namespace: traefik
+subsets:
+  - addresses:
+      - ip: 192.168.0.18
+    ports:
+      - port: 2283
+---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -52,18 +72,27 @@ spec:
   tls:
     certResolver: letsencrypt
 ---
+# --- Nextcloud (Docker transitoire → IP host) ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: immich-docker
+  name: nextcloud-docker
   namespace: traefik
 spec:
-  type: ExternalName
-  externalName: 192.168.0.18
   ports:
-    - port: 2283
+    - port: 80
 ---
-# --- Nextcloud (Docker transitoire → IP host) ---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: nextcloud-docker
+  namespace: traefik
+subsets:
+  - addresses:
+      - ip: 192.168.0.18
+    ports:
+      - port: 80
+---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -81,18 +110,27 @@ spec:
   tls:
     certResolver: letsencrypt
 ---
+# --- n8n (Docker transitoire → IP host) ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nextcloud-docker
+  name: n8n-docker
   namespace: traefik
 spec:
-  type: ExternalName
-  externalName: 192.168.0.18
   ports:
-    - port: 80
+    - port: 5678
 ---
-# --- n8n (Docker transitoire → IP host) ---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: n8n-docker
+  namespace: traefik
+subsets:
+  - addresses:
+      - ip: 192.168.0.18
+    ports:
+      - port: 5678
+---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -110,18 +148,27 @@ spec:
   tls:
     certResolver: letsencrypt
 ---
+# --- Minecraft (Docker transitoire → IP host) ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: n8n-docker
+  name: minecraft-docker
   namespace: traefik
 spec:
-  type: ExternalName
-  externalName: 192.168.0.18
   ports:
-    - port: 5678
+    - port: 25565
 ---
-# --- Minecraft (Docker transitoire → IP host) ---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: minecraft-docker
+  namespace: traefik
+subsets:
+  - addresses:
+      - ip: 192.168.0.18
+    ports:
+      - port: 25565
+---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
@@ -137,14 +184,3 @@ spec:
           port: 25565
   tls:
     certResolver: letsencrypt
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: minecraft-docker
-  namespace: traefik
-spec:
-  type: ExternalName
-  externalName: 192.168.0.18
-  ports:
-    - port: 25565
