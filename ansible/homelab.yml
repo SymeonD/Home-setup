@@ -13,6 +13,6 @@
     - traefik_k8s
     - immich
     - nextcloud
-    - minecraft
-    - n8n
+    - minecraft_k8s
+    - n8n_k8s
     - backup

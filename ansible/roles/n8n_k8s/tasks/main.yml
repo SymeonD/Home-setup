@@ -1,0 +1,52 @@
+- name: Create n8n Secret
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: n8n-secrets
+        namespace: n8n
+      type: Opaque
+      stringData:
+        N8N_HOST: "n8n.{{ domain }}"
+        N8N_PORT: "5678"
+        N8N_PROTOCOL: "https"
+        WEBHOOK_URL: "https://n8n.{{ domain }}/"
+        N8N_ENCRYPTION_KEY: "{{ n8n_encryption_key }}"
+        N8N_SECURE_COOKIE: "true"
+        N8N_USER_FOLDER: "/home/node/.n8n"
+
+- name: Apply n8n manifests
+  kubernetes.core.k8s:
+    state: present
+    template: "{{ playbook_dir }}/../k8s/n8n/n8n.yaml"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Stop Docker n8n
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/n8n"
+    state: absent
+  ignore_errors: true
+
+- name: Remove n8n transitional IngressRoute and Service from traefik namespace
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    definition:
+      - apiVersion: traefik.io/v1alpha1
+        kind: IngressRoute
+        metadata:
+          name: n8n
+          namespace: traefik
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          name: n8n-docker
+          namespace: traefik
+      - apiVersion: v1
+        kind: Endpoints
+        metadata:
+          name: n8n-docker
+          namespace: traefik

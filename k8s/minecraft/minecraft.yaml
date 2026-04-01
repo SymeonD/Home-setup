@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+  namespace: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      containers:
+        - name: minecraft
+          image: itzg/minecraft-server:latest
+          tty: true
+          stdin: true
+          envFrom:
+            - secretRef:
+                name: minecraft-secrets
+          env:
+            - name: EULA
+              value: "TRUE"
+            - name: MEMORY
+              value: "4096M"
+            - name: MOTD
+              value: "The Family"
+            - name: ONLINE_MODE
+              value: "false"
+            - name: USE_AIKAR_FLAGS
+              value: "true"
+            - name: USE_MEOWICE_FLAGS
+              value: "true"
+            - name: TZ
+              value: "Europe/Paris"
+            - name: DIFFICULTY
+              value: "2"
+            - name: SPAWN_PROTECTION
+              value: "0"
+            - name: ENABLE_RCON
+              value: "true"
+            - name: RCON_PORT
+              value: "25575"
+          ports:
+            - containerPort: 25565
+            - containerPort: 25575
+          volumeMounts:
+            - name: data
+              mountPath: /data
+        - name: minecraft-exporter
+          image: ghcr.io/dirien/minecraft-exporter:latest
+          securityContext:
+            runAsUser: 0
+          env:
+            - name: RCON_HOST
+              value: "localhost"
+            - name: RCON_PORT
+              value: "25575"
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minecraft-secrets
+                  key: RCON_PASSWORD
+          ports:
+            - containerPort: 9150
+          volumeMounts:
+            - name: data
+              mountPath: /minecraft
+      volumes:
+        - name: data
+          hostPath:
+            path: /srv/data/minecraft
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft
+  namespace: minecraft
+spec:
+  type: LoadBalancer
+  selector:
+    app: minecraft
+  ports:
+    - name: minecraft
+      port: 25565
+      targetPort: 25565
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-exporter
+  namespace: minecraft
+spec:
+  selector:
+    app: minecraft
+  ports:
+    - port: 9150
+      targetPort: 9150
