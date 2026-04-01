@@ -5,6 +5,7 @@ REQUESTED=("$@")
 
 export RESTIC_REPOSITORY=/srv/backup/restic-repo
 export RESTIC_PASSWORD_FILE=/root/.restic-password
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 ### Service definitions ###
 
@@ -23,7 +24,11 @@ declare -A SERVICE_DATA=(
 )
 
 # PostgreSQL metadata (only for services that use it)
-declare -A PG_CONTAINER=(
+declare -A PG_NAMESPACE=(
+  [immich]="immich"
+  [nextcloud]="nextcloud"
+)
+declare -A PG_DEPLOYMENT=(
   [immich]="immich-postgres"
   [nextcloud]="nextcloud-postgres"
 )
@@ -70,10 +75,10 @@ for svc in "${SERVICES[@]}"; do
   svc_failed=false
 
   # PostgreSQL dump (if applicable)
-  if [[ -n "${PG_CONTAINER[$svc]+_}" ]]; then
+  if [[ -n "${PG_NAMESPACE[$svc]+_}" ]]; then
     echo "[$svc] Dumping PostgreSQL..."
     mkdir -p "$BACKUP_DIR"
-    if docker exec "${PG_CONTAINER[$svc]}" \
+    if kubectl exec -n "${PG_NAMESPACE[$svc]}" "deployment/${PG_DEPLOYMENT[$svc]}" -- \
         pg_dumpall --clean --if-exists --username="${PG_USER[$svc]}" \
         | gzip > "$BACKUP_DIR/${PG_DUMP_FILE[$svc]}"; then
       echo "[$svc] PostgreSQL dump saved to $BACKUP_DIR/${PG_DUMP_FILE[$svc]}"
