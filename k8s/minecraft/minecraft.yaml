@@ -24,6 +24,8 @@ spec:
           env:
             - name: EULA
               value: "TRUE"
+            - name: VERSION
+              value: "1.21.11"
             - name: MEMORY
               value: "4096M"
             - name: MOTD
