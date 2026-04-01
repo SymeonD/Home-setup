@@ -38,7 +38,7 @@ data:
       letsencrypt:
         acme:
           email: "${TRAEFIK_ACME_EMAIL}"
-          storage: /acme.json
+          storage: /acme/acme.json
           httpChallenge:
             entryPoint: web
 
@@ -56,8 +56,8 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /srv/data/traefik/acme.json
-    type: File
+    path: /srv/data/traefik
+    type: Directory
   claimRef:
     name: traefik-acme-pvc
     namespace: traefik
@@ -116,8 +116,7 @@ spec:
               mountPath: /traefik.yml
               subPath: traefik.yml
             - name: acme
-              mountPath: /acme.json
-              subPath: acme.json
+              mountPath: /acme
       volumes:
         - name: config
           configMap:
