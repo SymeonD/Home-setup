@@ -46,35 +46,6 @@ data:
       kubernetesCRD: {}
       kubernetesIngress: {}
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: traefik-acme-pv
-spec:
-  capacity:
-    storage: 1Mi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /srv/data/traefik
-    type: Directory
-  claimRef:
-    name: traefik-acme-pvc
-    namespace: traefik
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: traefik-acme-pvc
-  namespace: traefik
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Mi
-  storageClassName: ""
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -122,5 +93,6 @@ spec:
           configMap:
             name: traefik-config
         - name: acme
-          persistentVolumeClaim:
-            claimName: traefik-acme-pvc
+          hostPath:
+            path: /srv/data/traefik
+            type: Directory
