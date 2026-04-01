@@ -1,0 +1,150 @@
+# --- Traefik dashboard ---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`traefik.{{ domain }}`)
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+  tls:
+    certResolver: letsencrypt
+---
+# --- Grafana (K8s) ---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`grafana.{{ domain }}`)
+      kind: Rule
+      services:
+        - name: grafana
+          port: 3000
+  tls:
+    certResolver: letsencrypt
+---
+# --- Immich (Docker transitoire → IP host) ---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: immich
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`immich.{{ domain }}`)
+      kind: Rule
+      services:
+        - name: immich-docker
+          port: 2283
+  tls:
+    certResolver: letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-docker
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: 192.168.0.18
+  ports:
+    - port: 2283
+---
+# --- Nextcloud (Docker transitoire → IP host) ---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nextcloud
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`nextcloud.{{ domain }}`)
+      kind: Rule
+      services:
+        - name: nextcloud-docker
+          port: 80
+  tls:
+    certResolver: letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-docker
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: 192.168.0.18
+  ports:
+    - port: 80
+---
+# --- n8n (Docker transitoire → IP host) ---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: n8n
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`n8n.{{ domain }}`)
+      kind: Rule
+      services:
+        - name: n8n-docker
+          port: 5678
+  tls:
+    certResolver: letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n-docker
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: 192.168.0.18
+  ports:
+    - port: 5678
+---
+# --- Minecraft (Docker transitoire → IP host) ---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: minecraft
+  namespace: traefik
+spec:
+  entryPoints:
+    - minecraft
+  routes:
+    - match: HostSNI(`minecraft.{{ domain }}`)
+      services:
+        - name: minecraft-docker
+          port: 25565
+  tls:
+    certResolver: letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-docker
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: 192.168.0.18
+  ports:
+    - port: 25565

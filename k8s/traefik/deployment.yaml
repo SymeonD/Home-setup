@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-config
+  namespace: traefik
+data:
+  traefik.yml: |
+    api:
+      dashboard: true
+      insecure: false
+
+    entryPoints:
+      web:
+        address: ":80"
+        http:
+          redirections:
+            entryPoint:
+              to: websecure
+              scheme: https
+
+      websecure:
+        address: ":443"
+        transport:
+          respondingTimeouts:
+            readTimeout: 600s
+            idleTimeout: 600s
+            writeTimeout: 600s
+
+      minecraft:
+        address: ":25565"
+        transport:
+          respondingTimeouts:
+            readTimeout: 600s
+            idleTimeout: 600s
+            writeTimeout: 600s
+
+    certificatesResolvers:
+      letsencrypt:
+        acme:
+          email: "${TRAEFIK_ACME_EMAIL}"
+          storage: /acme.json
+          httpChallenge:
+            entryPoint: web
+
+    providers:
+      kubernetesCRD: {}
+      kubernetesIngress: {}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: traefik-acme-pv
+spec:
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /srv/data/traefik/acme.json
+    type: File
+  claimRef:
+    name: traefik-acme-pvc
+    namespace: traefik
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: traefik-acme-pvc
+  namespace: traefik
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Mi
+  storageClassName: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik
+      containers:
+        - name: traefik
+          image: traefik:v3.3
+          args:
+            - --configFile=/traefik.yml
+          env:
+            - name: TRAEFIK_ACME_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: traefik-secrets
+                  key: acme-email
+          ports:
+            - name: web
+              containerPort: 80
+            - name: websecure
+              containerPort: 443
+            - name: minecraft
+              containerPort: 25565
+            - name: dashboard
+              containerPort: 8080
+          volumeMounts:
+            - name: config
+              mountPath: /traefik.yml
+              subPath: traefik.yml
+            - name: acme
+              mountPath: /acme.json
+              subPath: acme.json
+      volumes:
+        - name: config
+          configMap:
+            name: traefik-config
+        - name: acme
+          persistentVolumeClaim:
+            claimName: traefik-acme-pvc

@@ -10,7 +10,7 @@
     - k3s
     - k3s_secrets
     - monitoring_k8s
-    - traefik
+    - traefik_k8s
     - immich
     - nextcloud
     - minecraft
