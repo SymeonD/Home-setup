@@ -14,8 +14,8 @@
     group: 472
     mode: "0644"
   loop:
-    - "{{ playbook_dir }}/../ansible/roles/grafana/files/homelab-dashboard.json"
-    - "{{ playbook_dir }}/../ansible/roles/grafana/files/homelab-human-dashboard.json"
+    - "{{ role_path }}/files/homelab-dashboard.json"
+    - "{{ role_path }}/files/homelab-human-dashboard.json"
 
 - name: Apply node-exporter DaemonSet
   kubernetes.core.k8s:
