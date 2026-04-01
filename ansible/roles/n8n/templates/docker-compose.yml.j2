@@ -8,6 +8,8 @@ services:
     mem_limit: 2g
     mem_reservation: 256m
     cpus: 1.0
+    ports:
+      - "5678:5678"
     volumes:
       - {{ data_root }}/n8n:/home/node/.n8n
     labels:
