@@ -1,3 +1,8 @@
+- name: Install kubernetes Python library
+  ansible.builtin.pip:
+    name: kubernetes
+    state: present
+
 - name: Check if K3s is already installed
   ansible.builtin.stat:
     path: /usr/local/bin/k3s
