@@ -21,7 +21,7 @@
 - name: Apply n8n manifests
   kubernetes.core.k8s:
     state: present
-    template: "{{ playbook_dir }}/../k8s/n8n/n8n.yaml"
+    template: "{{ playbook_dir }}/../k8s/n8n/n8n.yaml.j2"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Stop Docker n8n
