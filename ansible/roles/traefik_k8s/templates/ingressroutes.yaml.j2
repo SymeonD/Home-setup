@@ -190,9 +190,7 @@ spec:
   entryPoints:
     - minecraft
   routes:
-    - match: HostSNI(`minecraft.{{ domain }}`)
+    - match: HostSNI(`*`)
       services:
         - name: minecraft-docker
           port: 25566
-  tls:
-    certResolver: letsencrypt
