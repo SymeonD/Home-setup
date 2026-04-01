@@ -11,8 +11,8 @@
     - k3s_secrets
     - monitoring_k8s
     - traefik_k8s
-    - immich
-    - nextcloud
+    - immich_k8s
+    - nextcloud_k8s
     - minecraft_k8s
     - n8n_k8s
     - backup

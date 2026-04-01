@@ -1,0 +1,67 @@
+- name: Stop Docker Nextcloud (libère le data directory PostgreSQL)
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_root }}/nextcloud"
+    state: absent
+  ignore_errors: true
+
+- name: Create nextcloud Secret
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: nextcloud-secrets
+        namespace: nextcloud
+      type: Opaque
+      stringData:
+        NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.{{ domain }}"
+        NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
+        NEXTCLOUD_ADMIN_PASSWORD: "{{ nextcloud_admin_password }}"
+        POSTGRES_HOST: "nextcloud-postgres"
+        POSTGRES_DB: "nextcloud"
+        POSTGRES_USER: "postgres"
+        POSTGRES_PASSWORD: "{{ postgres_password }}"
+        REDIS_HOST: "nextcloud-redis"
+
+- name: Update Nextcloud config.php trusted_proxies for K8s (CIDR pod K3s)
+  ansible.builtin.blockinfile:
+    path: /srv/data/nextcloud/html/config/config.php
+    marker: "// {mark} ANSIBLE MANAGED NEXTCLOUD PROXY"
+    insertafter: "\\$CONFIG = array \\("
+    block: |
+      'trusted_proxies' => array (
+        0 => '10.42.0.0/16',
+      ),
+      'overwriteprotocol' => 'https',
+      'overwritehost' => 'nextcloud.{{ domain }}',
+      'overwrite.cli.url' => 'https://nextcloud.{{ domain }}',
+      'forwarded_for_headers' => ['HTTP_X_FORWARDED_FOR'],
+
+- name: Apply nextcloud manifests
+  kubernetes.core.k8s:
+    state: present
+    template: "{{ playbook_dir }}/../k8s/nextcloud/nextcloud.yaml.j2"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Remove nextcloud transitional resources from traefik namespace
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    definition:
+      - apiVersion: traefik.io/v1alpha1
+        kind: IngressRoute
+        metadata:
+          name: nextcloud
+          namespace: traefik
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          name: nextcloud-docker
+          namespace: traefik
+      - apiVersion: v1
+        kind: Endpoints
+        metadata:
+          name: nextcloud-docker
+          namespace: traefik
