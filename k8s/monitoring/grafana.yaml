@@ -1,6 +1,22 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: grafana-dashboard-provider
+  namespace: monitoring
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: default
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 30
+        options:
+          path: /var/lib/grafana/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: grafana-datasources-prometheus
   namespace: monitoring
 data:
@@ -138,8 +154,11 @@ spec:
             - name: datasources-loki
               mountPath: /etc/grafana/provisioning/datasources/loki.yml
               subPath: loki.yml
+            - name: dashboard-provider
+              mountPath: /etc/grafana/provisioning/dashboards/dashboards.yaml
+              subPath: dashboards.yaml
             - name: dashboards
-              mountPath: /etc/grafana/provisioning/dashboards
+              mountPath: /var/lib/grafana/dashboards
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -150,6 +169,9 @@ spec:
         - name: datasources-loki
           configMap:
             name: grafana-datasources-loki
+        - name: dashboard-provider
+          configMap:
+            name: grafana-dashboard-provider
         - name: dashboards
           persistentVolumeClaim:
             claimName: grafana-dashboards-pvc
