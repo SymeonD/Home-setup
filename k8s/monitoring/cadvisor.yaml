@@ -16,6 +16,8 @@ spec:
       containers:
         - name: cadvisor
           image: gcr.io/cadvisor/cadvisor:v0.49.1
+          securityContext:
+            privileged: true
           ports:
             - containerPort: 8080
           resources:
@@ -37,6 +39,12 @@ spec:
               port: 8080
             initialDelaySeconds: 15
             periodSeconds: 30
+          args:
+            - --housekeeping_interval=10s
+            - --max_housekeeping_interval=15s
+            - --store_container_labels=true
+            - --containerd=/run/k3s/containerd/containerd.sock
+            - --containerd-namespace=k8s.io
           volumeMounts:
             - name: rootfs
               mountPath: /rootfs
@@ -47,8 +55,8 @@ spec:
             - name: sys
               mountPath: /sys
               readOnly: true
-            - name: docker
-              mountPath: /var/lib/docker
+            - name: containerd
+              mountPath: /run/k3s/containerd
               readOnly: true
       volumes:
         - name: rootfs
@@ -60,9 +68,9 @@ spec:
         - name: sys
           hostPath:
             path: /sys
-        - name: docker
+        - name: containerd
           hostPath:
-            path: /var/lib/docker
+            path: /run/k3s/containerd
 ---
 apiVersion: v1
 kind: Service
