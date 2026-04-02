@@ -21,9 +21,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -103,12 +101,9 @@
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
-          "expr": "time() - container_start_time_seconds{\r\n  container_label_com_docker_compose_service=\"$service\"\r\n}",
+          "expr": "time() - container_start_time_seconds{container=\"$service\", container!=\"POD\"}",
           "instant": false,
           "legendFormat": "Uptime",
           "range": true,
@@ -332,10 +327,7 @@
       "pluginVersion": "12.4.1",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "18 \r\n+ (25 * avg(rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])))\r\n+ (3 * clamp_max(avg(rate(node_disk_io_time_seconds_total{device=\"sda\"}[1m])), 1))\r\n+ (2.5 * clamp_max(avg(rate(node_disk_io_time_seconds_total{device=\"nvme0n1\"}[1m])), 1))",
           "instant": false,
@@ -413,7 +405,7 @@
       },
       "id": 110,
       "panels": [],
-      "title": "Docker Services Status",
+      "title": "K8s Services Status",
       "type": "row"
     },
     {
@@ -727,10 +719,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "-rate(node_disk_writes_completed_total{device=\"nvme0n1\"}[1m])",
           "instant": false,
@@ -739,10 +728,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "rate(node_disk_reads_completed_total{device=\"sda\"}[1m])",
           "instant": false,
@@ -751,10 +737,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "Prometheus",
           "editorMode": "code",
           "expr": "-rate(node_disk_writes_completed_total{device=\"sda\"}[1m])",
           "instant": false,
@@ -887,7 +870,7 @@
           "refId": "B"
         }
       ],
-      "title": "Docker LV",
+      "title": "Docker LV (inutilisé)",
       "type": "piechart"
     },
     {
@@ -965,26 +948,28 @@
           "text": [
             "immich-server",
             "nextcloud",
-            "minecraft-server"
+            "minecraft",
+            "n8n"
           ],
           "value": [
             "immich-server",
             "nextcloud",
-            "minecraft-server"
+            "minecraft",
+            "n8n"
           ]
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
+          "uid": "prometheus"
         },
-        "definition": "label_values(container_tasks_state,container_label_com_docker_compose_service)",
+        "definition": "label_values(container_last_seen{container!=\"\", container!=\"POD\", namespace!~\"kube-system|kube-public|monitoring\"}, container)",
         "label": "service",
         "multi": true,
         "name": "service",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(container_tasks_state,container_label_com_docker_compose_service)",
+          "query": "label_values(container_last_seen{container!=\"\", container!=\"POD\", namespace!~\"kube-system|kube-public|monitoring\"}, container)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

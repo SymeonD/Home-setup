@@ -214,7 +214,7 @@
       },
       "id": 5,
       "panels": [],
-      "title": "Docker Containers",
+      "title": "Kubernetes Pods",
       "type": "row"
     },
     {
@@ -263,7 +263,7 @@
       "pluginVersion": "12.4.1",
       "targets": [
         {
-          "expr": "container_last_seen{container!=\"\"}",
+          "expr": "container_last_seen{container!=\"\", container!=\"POD\"}",
           "legendFormat": "{{container}}",
           "refId": "A"
         }
@@ -317,7 +317,7 @@
       "pluginVersion": "12.4.1",
       "targets": [
         {
-          "expr": "container_restart_count{container!=\"\"}",
+          "expr": "container_restart_count{container!=\"\", container!=\"POD\"}",
           "legendFormat": "{{container}}",
           "refId": "A"
         }
@@ -364,11 +364,11 @@
       "pluginVersion": "12.4.1",
       "targets": [
         {
-          "expr": "{job=\"docker\"} |= \"error\"",
+          "expr": "{job=\"kubernetes\"} |= \"error\"",
           "refId": "A"
         }
       ],
-      "title": "Recent Docker Errors",
+      "title": "Recent Pod Errors",
       "type": "logs"
     },
     {
