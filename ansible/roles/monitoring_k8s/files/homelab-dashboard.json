@@ -34,7 +34,7 @@
       "type": "row"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -91,7 +91,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -148,7 +148,7 @@
       "type": "gauge"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -218,7 +218,7 @@
       "type": "row"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -272,7 +272,7 @@
       "type": "table"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -339,7 +339,7 @@
       "type": "row"
     },
     {
-      "datasource": "Loki",
+      "datasource": {"type": "loki", "uid": "loki"},
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -385,7 +385,7 @@
       "type": "row"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -441,7 +441,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {
         "defaults": {
           "mappings": [],
