@@ -24,10 +24,13 @@ To view or modify a specific role, navigate to its sub-directory within this `ro
 Each sub-directory in this directory corresponds to a specific Ansible role. List of roles included, in order of execution:
 - [`system/`](./system/README.md): Role for configuring system-level settings and commands. Click to view details.
 - [`storage/`](./storage/README.md): Role for setting up storage configurations, external drives and logical volumes. Click to view details.
-- [`docker/`](./docker/README.md): Role for installing and configuring Docker and Docker Compose. Click to view details.
-- [`traefik/`](./traefik/README.md): Role for setting up Traefik as a reverse proxy, installs docker files and configuration. Click to view details.
-- [`immich/`](./immich/README.md): Role for deploying Immich, a self-hosted photo and video management solution, installs docker files and configuration. Click to view details.
-- [`nextcloud/`](./nextcloud/README.md): Role for deploying Nextcloud, a self-hosted cloud storage solution, installs docker files and configuration. Click to view details.
+- [`k3s/`](./k3s/README.md): Role for installing and configuring K3s and deploying Kubernetes namespaces and network policies. Click to view details.
+- [`traefik_k8s/`](./traefik_k8s/README.md): Role for deploying Traefik as a reverse proxy on K3s. Click to view details.
+- [`immich_k8s/`](./immich_k8s/README.md): Role for deploying Immich on K3s. Click to view details.
+- [`nextcloud_k8s/`](./nextcloud_k8s/README.md): Role for deploying Nextcloud on K3s. Click to view details.
+- [`n8n_k8s/`](./n8n_k8s/README.md): Role for deploying n8n on K3s. Click to view details.
+- [`minecraft_k8s/`](./minecraft_k8s/README.md): Role for deploying Minecraft server on K3s. Click to view details.
+- [`monitoring_k8s/`](./monitoring_k8s/README.md): Role for deploying the monitoring stack (Prometheus, Grafana, Loki, Promtail, cAdvisor, node-exporter) on K3s. Click to view details.
 - [`backup/`](./backup/README.md): Role for setting up backup solutions, postgres dump and restic. Creates script for automated backups and restore. Click to view details.
 
 ## Additional Information

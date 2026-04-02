@@ -20,40 +20,8 @@
   when: backup_mounted.rc != 0
 
 # -----------------------------
-# Docker LV et mount safe
+# Reserved LV (unused, 50G available for future use)
 # -----------------------------
-
-- name: Ensure Docker mount directory exists
-  ansible.builtin.file:
-    path: /var/lib/docker
-    state: directory
-
-- name: Check if Docker filesystem exists
-  ansible.builtin.command: blkid /dev/ubuntu-vg/docker
-  register: docker_fs
-  failed_when: false
-  changed_when: false
-
-- name: Format Docker LV if no filesystem
-  community.general.filesystem:
-    fstype: ext4
-    dev: /dev/ubuntu-vg/docker
-  when: docker_fs.rc != 0
-
-- name: Check if Docker LV already mounted
-  ansible.builtin.command: mountpoint -q /var/lib/docker
-  register: docker_mounted
-  failed_when: false
-  changed_when: false
-
-- name: Mount Docker LV if not mounted
-  ansible.posix.mount:
-    path: /var/lib/docker
-    src: /dev/ubuntu-vg/docker
-    fstype: ext4
-    opts: defaults
-    state: mounted
-  when: docker_mounted.rc != 0
 
 # -----------------------------
 # Data LV et mount safe

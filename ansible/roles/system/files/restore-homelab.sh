@@ -25,7 +25,7 @@ if [ -z "$DATE" ]; then
 fi
 
 if [[ ! "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-  echo "❌ Invalid date format: '$DATE' (expected YYYY-MM-DD)"
+  echo "Invalid date format: '$DATE' (expected YYYY-MM-DD)"
   echo ""
   usage
   exit 1
@@ -44,11 +44,11 @@ declare -A SERVICE_TAG=(
   [minecraft]="minecraft"
 )
 
-declare -A SERVICE_COMPOSE=(
-  [immich]="/opt/docker/immich/docker-compose.yml"
-  [nextcloud]="/opt/docker/nextcloud/docker-compose.yml"
-  [n8n]="/opt/docker/n8n/docker-compose.yml"
-  [minecraft]="/opt/docker/minecraft/docker-compose.yml"
+declare -A SERVICE_NAMESPACE=(
+  [immich]="immich"
+  [nextcloud]="nextcloud"
+  [n8n]="n8n"
+  [minecraft]="minecraft"
 )
 
 declare -A SERVICE_DATA=(
@@ -59,7 +59,7 @@ declare -A SERVICE_DATA=(
 )
 
 # PostgreSQL metadata (only for services that use it)
-declare -A PG_CONTAINER=(
+declare -A PG_DEPLOYMENT=(
   [immich]="immich-postgres"
   [nextcloud]="nextcloud-postgres"
 )
@@ -89,7 +89,7 @@ else
   SERVICES=()
   for svc in "${REQUESTED[@]}"; do
     if [[ ! " ${ALL_SERVICES[*]} " =~ " ${svc} " ]]; then
-      echo "❌ Unknown service: $svc"
+      echo "Unknown service: $svc"
       echo "Valid services: ${ALL_SERVICES[*]}"
       exit 1
     fi
@@ -118,7 +118,7 @@ for svc in "${SERVICES[@]}"; do
     | head -n1)
 
   if [ -z "$snap" ]; then
-    echo "❌ No restic snapshot found for service '$svc' on date $DATE"
+    echo "No restic snapshot found for service '$svc' on date $DATE"
     exit 1
   fi
 
@@ -131,7 +131,7 @@ for svc in "${SERVICES[@]}"; do
   if [[ -n "${PG_DUMP[$svc]+_}" ]]; then
     dump_path="$PG_BASE/${PG_DUMP[$svc]}"
     if [ ! -f "$dump_path" ]; then
-      echo "❌ PostgreSQL dump not found: $dump_path"
+      echo "PostgreSQL dump not found: $dump_path"
       exit 1
     fi
     echo "Using $svc PostgreSQL dump: $dump_path"
@@ -139,7 +139,7 @@ for svc in "${SERVICES[@]}"; do
 done
 
 echo ""
-echo "⚠️  Are you sure you want to restore [${SERVICES[*]}] to $DATE?"
+echo "Are you sure you want to restore [${SERVICES[*]}] to $DATE?"
 read -p "This will overwrite current data! (y/N): " CONFIRM
 if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
   echo "Restore cancelled."
@@ -148,12 +148,11 @@ fi
 
 ### 1. Stop services ###
 for svc in "${SERVICES[@]}"; do
+  ns="${SERVICE_NAMESPACE[$svc]}"
   echo "Stopping $svc..."
-  docker compose -f "${SERVICE_COMPOSE[$svc]}" down -v
+  kubectl scale deployment --all -n "$ns" --replicas=0
+  kubectl wait --for=delete pod --all -n "$ns" --timeout=60s 2>/dev/null || true
 done
-
-echo "Waiting for services to stop..."
-sleep 10
 
 ### 1.5. Clear PostgreSQL data directories ###
 for svc in "${SERVICES[@]}"; do
@@ -174,37 +173,45 @@ done
 ### 3. Start PostgreSQL only (for services that need it) ###
 PG_SERVICES=()
 for svc in "${SERVICES[@]}"; do
-  if [[ -n "${PG_CONTAINER[$svc]+_}" ]]; then
+  if [[ -n "${PG_DEPLOYMENT[$svc]+_}" ]]; then
     PG_SERVICES+=("$svc")
   fi
 done
 
 if [ ${#PG_SERVICES[@]} -gt 0 ]; then
   for svc in "${PG_SERVICES[@]}"; do
-    echo "Creating containers for $svc (postgres only)..."
-    docker compose -f "${SERVICE_COMPOSE[$svc]}" create
-    docker start "${PG_CONTAINER[$svc]}"
+    ns="${SERVICE_NAMESPACE[$svc]}"
+    deploy="${PG_DEPLOYMENT[$svc]}"
+    echo "Starting PostgreSQL for $svc..."
+    kubectl scale deployment "$deploy" -n "$ns" --replicas=1
+    kubectl rollout status deployment/"$deploy" -n "$ns" --timeout=60s
   done
 
-  echo "Waiting for PostgreSQL to start..."
-  sleep 10
+  echo "Waiting for PostgreSQL to be ready..."
+  sleep 5
 
   ### 4. Restore PostgreSQL ###
   for svc in "${PG_SERVICES[@]}"; do
-    echo "Restoring PostgreSQL for $svc..."
+    ns="${SERVICE_NAMESPACE[$svc]}"
+    deploy="${PG_DEPLOYMENT[$svc]}"
+    pod=$(kubectl get pod -n "$ns" -l "app=$deploy" -o jsonpath='{.items[0].metadata.name}')
+    echo "Restoring PostgreSQL for $svc (pod: $pod)..."
     gunzip --stdout "$PG_BASE/${PG_DUMP[$svc]}" \
       | sed "s/SELECT pg_catalog.set_config('search_path', '', false);/SELECT pg_catalog.set_config('search_path', 'public, pg_catalog', true);/g" \
-      | docker exec -i "${PG_CONTAINER[$svc]}" psql --dbname="${PG_DB[$svc]}" --username="${PG_USER[$svc]}"
+      | kubectl exec -i "$pod" -n "$ns" -- psql --dbname="${PG_DB[$svc]}" --username="${PG_USER[$svc]}"
   done
 fi
 
 ### 5. Restart all restored services ###
-docker compose -f /opt/docker/traefik/docker-compose.yml up -d
+echo "Starting traefik..."
+kubectl scale deployment --all -n traefik --replicas=1
+kubectl rollout status deployment --timeout=120s -n traefik
 
 for svc in "${SERVICES[@]}"; do
+  ns="${SERVICE_NAMESPACE[$svc]}"
   echo "Starting $svc..."
-  docker compose -f "${SERVICE_COMPOSE[$svc]}" up -d
+  kubectl scale deployment --all -n "$ns" --replicas=1
 done
 
 echo ""
-echo "=== ✅ RESTORE COMPLETED ([${SERVICES[*]}] @ $DATE) ==="
+echo "=== RESTORE COMPLETED ([${SERVICES[*]}] @ $DATE) ==="

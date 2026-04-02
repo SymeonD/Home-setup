@@ -1,10 +1,10 @@
-- name: Create docker group
+- name: Create ubuntu-vg volume group
   community.general.lvg:
     vg: ubuntu-vg
     pvs: /dev/nvme0n1p3
   register: vg_created
 
-- name: Create docker volume
+- name: Create unused LV (reserved for future use)
   community.general.lvol:
     vg: ubuntu-vg
     lv: docker

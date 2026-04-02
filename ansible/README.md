@@ -31,7 +31,7 @@ Ensure that you have the necessary inventory file and configuration settings in 
 For more information on how to create and manage Ansible playbooks, refer to the [Ansible documentation](https://docs.ansible.com/).
 
 ## TODO:
-- [ ] Create data directories via ansible instead of letting docker do it automatically, to set correct permissions and ownership.
 - [ ] Add snapshots date listing in restore script when nothing is found
 - [ ] Add echo to backup scripts
 - [x] Clean repo
+- [x] Migrate from Docker Compose to K3s
