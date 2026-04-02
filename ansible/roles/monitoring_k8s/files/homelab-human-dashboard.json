@@ -18,108 +18,16 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
   "panels": [
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Uptime"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "dtdurations"
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 111,
-      "maxPerRow": 6,
-      "options": {
-        "colorMode": "background_solid",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "text": {},
-        "textMode": "value_and_name",
-        "wideLayout": false
-      },
-      "pluginVersion": "12.4.1",
-      "repeat": "service",
-      "repeatDirection": "h",
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "time() - container_start_time_seconds{container=\"$service\", container!=\"POD\"}",
-          "instant": false,
-          "legendFormat": "Uptime",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "$service",
-      "type": "stat"
-    },
     {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 0
       },
       "id": 4,
       "panels": [],
@@ -127,7 +35,10 @@
       "type": "row"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -136,7 +47,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": 0
+                "value": null
               },
               {
                 "color": "red",
@@ -152,7 +63,7 @@
         "h": 8,
         "w": 6,
         "x": 0,
-        "y": 11
+        "y": 1
       },
       "id": 8,
       "options": {
@@ -172,7 +83,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "node_time_seconds - node_boot_time_seconds",
@@ -183,7 +94,10 @@
       "type": "stat"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -194,7 +108,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": 0
+                "value": null
               },
               {
                 "color": "red",
@@ -210,7 +124,7 @@
         "h": 4,
         "w": 4,
         "x": 6,
-        "y": 11
+        "y": 1
       },
       "id": 5,
       "options": {
@@ -228,7 +142,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
@@ -239,7 +153,10 @@
       "type": "gauge"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -269,7 +186,6 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -286,7 +202,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": 0
+                "value": null
               },
               {
                 "color": "#EAB839",
@@ -306,7 +222,7 @@
         "h": 8,
         "w": 14,
         "x": 10,
-        "y": 11
+        "y": 1
       },
       "id": 101,
       "options": {
@@ -324,10 +240,13 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "code",
           "expr": "18 \r\n+ (25 * avg(rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])))\r\n+ (3 * clamp_max(avg(rate(node_disk_io_time_seconds_total{device=\"sda\"}[1m])), 1))\r\n+ (2.5 * clamp_max(avg(rate(node_disk_io_time_seconds_total{device=\"nvme0n1\"}[1m])), 1))",
           "instant": false,
@@ -340,7 +259,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -351,7 +273,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": 0
+                "value": null
               },
               {
                 "color": "red",
@@ -367,7 +289,7 @@
         "h": 4,
         "w": 4,
         "x": 6,
-        "y": 15
+        "y": 5
       },
       "id": 6,
       "options": {
@@ -385,7 +307,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100",
@@ -401,7 +323,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 9
       },
       "id": 110,
       "panels": [],
@@ -409,12 +331,111 @@
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 111,
+      "maxPerRow": 6,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "11.3.0",
+      "repeat": "service",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "time() - container_start_time_seconds{container=\"$service\", container!=\"POD\"}",
+          "instant": false,
+          "legendFormat": "Uptime",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "$service",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 15
       },
       "id": 1,
       "panels": [],
@@ -422,7 +443,10 @@
       "type": "row"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -444,7 +468,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 21
+        "y": 16
       },
       "id": 108,
       "options": {
@@ -481,7 +505,7 @@
           "unit": "GiB"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "editorMode": "code",
@@ -502,6 +526,10 @@
       "type": "piechart"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -523,7 +551,7 @@
         "h": 6,
         "w": 4,
         "x": 5,
-        "y": 21
+        "y": 16
       },
       "id": 106,
       "options": {
@@ -547,7 +575,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "node_filesystem_size_bytes{mountpoint='/srv/data'} - node_filesystem_avail_bytes{mountpoint='/srv/data'}",
@@ -564,6 +592,10 @@
       "type": "piechart"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -585,7 +617,7 @@
         "h": 6,
         "w": 4,
         "x": 9,
-        "y": 21
+        "y": 16
       },
       "id": 104,
       "options": {
@@ -609,7 +641,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "node_filesystem_size_bytes{mountpoint='/'} - node_filesystem_avail_bytes{mountpoint='/'}",
@@ -626,7 +658,10 @@
       "type": "piechart"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -656,7 +691,6 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -672,7 +706,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": 0
+                "value": null
               },
               {
                 "color": "red",
@@ -687,7 +721,7 @@
         "h": 12,
         "w": 11,
         "x": 13,
-        "y": 21
+        "y": 16
       },
       "id": 109,
       "options": {
@@ -703,7 +737,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "editorMode": "code",
@@ -713,7 +747,10 @@
           "refId": "A"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "code",
           "expr": "-rate(node_disk_writes_completed_total{device=\"nvme0n1\"}[1m])",
           "instant": false,
@@ -722,7 +759,10 @@
           "refId": "B"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "code",
           "expr": "rate(node_disk_reads_completed_total{device=\"sda\"}[1m])",
           "instant": false,
@@ -731,7 +771,10 @@
           "refId": "C"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "code",
           "expr": "-rate(node_disk_writes_completed_total{device=\"sda\"}[1m])",
           "instant": false,
@@ -765,7 +808,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 27
+        "y": 22
       },
       "id": 103,
       "options": {
@@ -789,7 +832,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "node_filesystem_size_bytes{mountpoint='/srv/backup'} - node_filesystem_avail_bytes{mountpoint='/srv/backup'}",
@@ -827,7 +870,7 @@
         "h": 6,
         "w": 4,
         "x": 5,
-        "y": 27
+        "y": 22
       },
       "id": 105,
       "options": {
@@ -851,7 +894,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "node_filesystem_size_bytes{mountpoint='/var/lib/docker'} - node_filesystem_avail_bytes{mountpoint='/var/lib/docker'}",
@@ -889,7 +932,7 @@
         "h": 6,
         "w": 4,
         "x": 9,
-        "y": 27
+        "y": 22
       },
       "id": 107,
       "options": {
@@ -913,7 +956,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.1",
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "expr": "node_filesystem_size_bytes{mountpoint='/srv/backup'} - node_filesystem_avail_bytes{mountpoint='/srv/backup'}",
@@ -932,12 +975,11 @@
   ],
   "preload": false,
   "refresh": "10s",
-  "schemaVersion": 42,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
       {
-        "allowCustomValue": false,
         "current": {
           "text": [
             "immich-server",
@@ -968,7 +1010,6 @@
         },
         "refresh": 1,
         "regex": "",
-        "regexApplyTo": "value",
         "type": "query"
       }
     ]
@@ -981,6 +1022,6 @@
   "timezone": "browser",
   "title": "Homelab Monitoring 2",
   "uid": "homelab-pro-2",
-  "version": 69,
+  "version": 1,
   "weekStart": ""
 }
