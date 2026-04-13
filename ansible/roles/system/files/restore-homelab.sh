@@ -104,26 +104,48 @@ echo ""
 ### Resolve restic snapshots ###
 declare -A SNAPSHOT
 
+ALL_SNAPSHOTS_JSON=$(restic snapshots --json)
+
 for svc in "${SERVICES[@]}"; do
   tag="${SERVICE_TAG[$svc]}"
-  snap=$(restic snapshots --json \
-    | jq -r '
-        sort_by(.time)
-        | reverse
-        | .[]
-        | select(.time | startswith("'"$DATE"'"))
-        | select(.tags | index("'"$tag"'"))
-        | .short_id
-      ' \
-    | head -n1)
 
-  if [ -z "$snap" ]; then
+  mapfile -t SNAP_IDS < <(echo "$ALL_SNAPSHOTS_JSON" | jq -r '
+    sort_by(.time)
+    | .[]
+    | select(.time | startswith("'"$DATE"'"))
+    | select(.tags | index("'"$tag"'"))
+    | .short_id
+  ')
+  mapfile -t SNAP_TIMES < <(echo "$ALL_SNAPSHOTS_JSON" | jq -r '
+    sort_by(.time)
+    | .[]
+    | select(.time | startswith("'"$DATE"'"))
+    | select(.tags | index("'"$tag"'"))
+    | .time
+  ')
+
+  if [ ${#SNAP_IDS[@]} -eq 0 ]; then
     echo "No restic snapshot found for service '$svc' on date $DATE"
     exit 1
   fi
 
-  SNAPSHOT[$svc]="$snap"
-  echo "Using $svc restic snapshot:  ${SNAPSHOT[$svc]}"
+  echo ""
+  echo "Available snapshots for '$svc' on $DATE:"
+  for i in "${!SNAP_IDS[@]}"; do
+    printf "  [%d] %s  %s\n" "$((i+1))" "${SNAP_IDS[$i]}" "${SNAP_TIMES[$i]}"
+  done
+  echo ""
+
+  while true; do
+    read -p "Choose a snapshot for '$svc' (1-${#SNAP_IDS[@]}): " CHOICE
+    if [[ "$CHOICE" =~ ^[0-9]+$ ]] && [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le "${#SNAP_IDS[@]}" ]; then
+      break
+    fi
+    echo "Invalid choice, please enter a number between 1 and ${#SNAP_IDS[@]}."
+  done
+
+  SNAPSHOT[$svc]="${SNAP_IDS[$((CHOICE-1))]}"
+  echo "Selected $svc snapshot: ${SNAPSHOT[$svc]}  (${SNAP_TIMES[$((CHOICE-1))]})"
 done
 
 ### Check PostgreSQL dumps for services that need it ###
