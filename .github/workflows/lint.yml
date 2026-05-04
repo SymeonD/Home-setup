@@ -34,7 +34,7 @@ jobs:
 
       # community.general et ansible.posix sont requis pour syntax-check
       - name: Install Ansible collections
-        run: ansible-galaxy collection install community.general ansible.posix
+        run: ansible-galaxy collection install community.general ansible.posix kubernetes.core
 
       - name: Run ansible-lint
         run: ansible-lint ansible/

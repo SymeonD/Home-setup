@@ -13,6 +13,14 @@ rules:
   comments:
     min-spaces-from-content: 1
 
+  # Requis par ansible-lint
+  comments-indentation: false
+  braces:
+    max-spaces-inside: 1
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
+
 ignore: |
   # Templates Jinja2 — syntaxe non-YAML valide
   k8s/**/*.yaml.j2
