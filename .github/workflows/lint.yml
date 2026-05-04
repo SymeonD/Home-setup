@@ -1,0 +1,54 @@
+name: Lint
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  yamllint:
+    name: YAML Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run yamllint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yml
+          # Exclut les templates Jinja2 (.yaml.j2) — syntaxe non-YAML valide
+          file_or_dir: >
+            ansible/
+            k8s/
+
+  ansible-lint:
+    name: Ansible Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@v24
+        with:
+          working_directory: ansible/
+
+  kubeval:
+    name: K8s Manifest Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install kubeval
+        run: |
+          wget -q https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo mv kubeval /usr/local/bin/
+
+      - name: Validate K8s manifests
+        # --ignore-missing-schemas : ignore les CRDs custom (Traefik IngressRoute, Middleware...)
+        # Les .yaml.j2 sont exclus car ils contiennent du Jinja2 non-YAML
+        run: |
+          find k8s/ -name "*.yaml" | xargs kubeval \
+            --ignore-missing-schemas \
+            --kubernetes-version 1.30.0

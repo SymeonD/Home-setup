@@ -81,6 +81,8 @@ spec:
       labels:
         app: prometheus
     spec:
+      nodeSelector:
+        node-role: master
       containers:
         - name: prometheus
           image: prom/prometheus:v2.54.1

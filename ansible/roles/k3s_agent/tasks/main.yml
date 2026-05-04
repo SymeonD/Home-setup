@@ -1,0 +1,42 @@
+- name: Install kubernetes Python library
+  ansible.builtin.apt:
+    name: python3-kubernetes
+    state: present
+    update_cache: yes
+
+# Lit le token depuis le master en mémoire (base64).
+# delegate_to : exécute cette tâche sur le master depuis le contexte du worker.
+- name: Fetch K3s node token from master
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: k3s_node_token
+  delegate_to: "{{ groups['k3s_master'][0] }}"
+
+- name: Check if K3s agent is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s
+  register: k3s_agent_binary
+
+# L'install script détecte K3S_URL + K3S_TOKEN → mode agent automatiquement.
+# Même version que le master pour éviter tout écart de compatibilité.
+- name: Install K3s agent
+  ansible.builtin.shell:
+    cmd: >
+      curl -sfL https://get.k3s.io |
+      INSTALL_K3S_VERSION="v1.34.6+k3s1"
+      K3S_URL="https://{{ hostvars[groups['k3s_master'][0]]['ansible_host'] }}:6443"
+      K3S_TOKEN="{{ k3s_node_token['content'] | b64decode | trim }}"
+      sh -
+  when: not k3s_agent_binary.stat.exists
+  changed_when: true
+
+# Vérifié depuis le master car c'est lui qui a kubectl + kubeconfig.
+- name: Wait for worker node to be Ready
+  ansible.builtin.command:
+    cmd: kubectl get node {{ inventory_hostname }} --no-headers
+  register: worker_node_status
+  until: worker_node_status.rc == 0 and 'Ready' in worker_node_status.stdout
+  retries: 30
+  delay: 10
+  delegate_to: "{{ groups['k3s_master'][0] }}"
+  changed_when: false

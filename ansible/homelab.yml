@@ -1,10 +1,18 @@
-- name: Homelab
-  hosts: localhost
-  connection: local
-  # Makes ansible run as root
+# Play 1 : système de base sur tous les nœuds (master + worker)
+- name: System setup — all nodes
+  hosts: k3s_cluster
+  connection: "{{ ansible_connection | default('ssh') }}"
   become: true
   roles:
     - system
+
+# Play 2 : K3s server + toutes les apps — master uniquement
+# Le master doit être prêt avant que le worker puisse rejoindre (Play 3).
+- name: K3s server + applications — master only
+  hosts: k3s_master
+  connection: "{{ ansible_connection | default('ssh') }}"
+  become: true
+  roles:
     - storage
     - k3s
     - monitoring_k8s
@@ -14,3 +22,11 @@
     - minecraft_k8s
     - n8n_k8s
     - backup
+
+# Play 3 : K3s agent — worker uniquement
+# Tourne après Play 2 pour que l'API du master soit disponible.
+- name: K3s agent — worker only
+  hosts: k3s_worker
+  become: true
+  roles:
+    - k3s_agent

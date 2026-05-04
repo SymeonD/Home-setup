@@ -1,0 +1,11 @@
+exclude_paths:
+  - ansible/group_vars/all/vault.yml
+
+skip_list:
+  # `shell` avec changed_when: true est intentionnel (curl | sh pour K3s)
+  - no-changed-when
+  # Les tâches sans `name` dans certains includes
+  - unnamed-task
+
+warn_list:
+  - yaml[line-length]

@@ -55,6 +55,8 @@ spec:
       labels:
         app: traefik
     spec:
+      nodeSelector:
+        node-role: master
       serviceAccountName: traefik
       containers:
         - name: traefik

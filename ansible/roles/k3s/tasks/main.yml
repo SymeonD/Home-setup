@@ -24,6 +24,18 @@
   delay: 10
   changed_when: false
 
+- name: Label master node with node-role=master
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    definition:
+      apiVersion: v1
+      kind: Node
+      metadata:
+        name: "{{ inventory_hostname }}"
+        labels:
+          node-role: master
+
 - name: Wait for local-path-provisioner to be ready
   ansible.builtin.command:
     cmd: kubectl rollout status deployment/local-path-provisioner -n kube-system --timeout=120s

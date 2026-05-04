@@ -1,0 +1,21 @@
+extends: default
+
+rules:
+  # K8s manifests ont souvent des longues lignes (images, args...)
+  line-length:
+    max: 200
+    level: warning
+
+  # Plusieurs documents YAML dans un même fichier (séparés par ---)
+  document-start: disable
+
+  # Autorise les commentaires sans espace obligatoire après #
+  comments:
+    min-spaces-from-content: 1
+
+ignore: |
+  # Templates Jinja2 — syntaxe non-YAML valide
+  k8s/**/*.yaml.j2
+  ansible/**/*.yaml.j2
+  # Vault chiffré
+  ansible/group_vars/all/vault.yml

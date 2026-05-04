@@ -119,6 +119,8 @@ spec:
       labels:
         app: grafana
     spec:
+      nodeSelector:
+        node-role: master
       securityContext:
         runAsUser: 472
         runAsGroup: 472
