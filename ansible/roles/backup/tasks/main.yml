@@ -21,7 +21,7 @@
       - postgresql-client
       - rsync
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Ensure restic repository environment variable (no password)
   ansible.builtin.copy:

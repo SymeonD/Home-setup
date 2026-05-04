@@ -1,20 +1,20 @@
 - name: System | timezone
-  import_tasks: timezone.yml
+  ansible.builtin.import_tasks: timezone.yml
 
 - name: System | Base packages
-  import_tasks: packages.yml
+  ansible.builtin.import_tasks: packages.yml
 
 - name: System | Firewall
-  import_tasks: firewall.yml
+  ansible.builtin.import_tasks: firewall.yml
 
 - name: System | Bashrc
-  import_tasks: bashrc.yml
+  ansible.builtin.import_tasks: bashrc.yml
 
 - name: System | Services
-  import_tasks: services.yml
+  ansible.builtin.import_tasks: services.yml
 
 - name: System | Swap
-  import_tasks: swap.yml
+  ansible.builtin.import_tasks: swap.yml
 
 - name: System | Fail2ban
-  import_tasks: fail2ban.yml
+  ansible.builtin.import_tasks: fail2ban.yml

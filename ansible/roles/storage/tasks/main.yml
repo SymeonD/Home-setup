@@ -1,9 +1,9 @@
 - name: Storage | LVM
-  import_tasks: lvm.yml
+  ansible.builtin.import_tasks: lvm.yml
 
 - name: Storage | backup
-  include_tasks: backup.yml
+  ansible.builtin.include_tasks: backup.yml
   tags: [init_backup]
 
 - name: Storage | mounts
-  import_tasks: mounts.yml
+  ansible.builtin.import_tasks: mounts.yml

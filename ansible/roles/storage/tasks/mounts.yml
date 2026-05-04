@@ -3,6 +3,7 @@
   ansible.builtin.file:
     path: "{{ backup_root }}"
     state: directory
+    mode: '0755'
 
 - name: Check if backup is already mounted
   ansible.builtin.command: mountpoint -q /srv/backup
@@ -31,6 +32,7 @@
   ansible.builtin.file:
     path: /srv/data
     state: directory
+    mode: '0755'
 
 - name: Check if Data filesystem exists
   ansible.builtin.command: blkid /dev/ubuntu-vg/data

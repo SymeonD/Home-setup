@@ -2,10 +2,13 @@ exclude_paths:
   - ansible/group_vars/all/vault.yml
 
 skip_list:
+  # K3s s'installe uniquement via curl | sh — pas d'alternative en module Ansible
+  - command-instead-of-module
+  - risky-shell-pipe
+  # Restart fail2ban inline est acceptable pour un homelab (pas de handler dédié)
+  - no-handler
   # `shell` avec changed_when: true est intentionnel (curl | sh pour K3s)
   - no-changed-when
-  # Les tâches sans `name` dans certains includes
-  - unnamed-task
 
 warn_list:
   - yaml[line-length]

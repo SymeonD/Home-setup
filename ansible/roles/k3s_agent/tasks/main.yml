@@ -2,7 +2,7 @@
   ansible.builtin.apt:
     name: python3-kubernetes
     state: present
-    update_cache: yes
+    update_cache: true
 
 # Lit le token depuis le master en mémoire (base64).
 # delegate_to : exécute cette tâche sur le master depuis le contexte du worker.

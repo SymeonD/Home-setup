@@ -2,7 +2,7 @@
   ansible.builtin.apt:
     name: python3-kubernetes
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Check if K3s is already installed
   ansible.builtin.stat:
