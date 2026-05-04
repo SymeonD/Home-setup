@@ -28,10 +28,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Pinned ensemble compatible — ansible-core 2.19 casse ansible-lint v24
+      - name: Install ansible-lint
+        run: pip install "ansible-core==2.17.7" "ansible-lint==24.12.2"
+
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v24
-        with:
-          working_directory: ansible/
+        run: ansible-lint ansible/
 
   kubeval:
     name: K8s Manifest Validation

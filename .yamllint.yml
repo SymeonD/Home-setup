@@ -19,3 +19,5 @@ ignore: |
   ansible/**/*.yaml.j2
   # Vault chiffré
   ansible/group_vars/all/vault.yml
+  # CRDs officiels Traefik — indentation upstream, on ne les modifie pas
+  k8s/traefik/crds.yaml

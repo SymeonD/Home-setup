@@ -52,4 +52,3 @@
     state: present
     src: "{{ playbook_dir }}/../k8s/monitoring/grafana.yaml"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
-
