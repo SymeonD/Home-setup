@@ -33,6 +33,34 @@
       'overwrite.cli.url' => 'https://nextcloud.{{ domain }}',
       'forwarded_for_headers' => ['HTTP_X_FORWARDED_FOR'],
 
+- name: Patch nextcloud strategy to Recreate
+  kubernetes.core.k8s:
+    state: patched
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    kind: Deployment
+    name: nextcloud
+    namespace: nextcloud
+    definition:
+      spec:
+        strategy:
+          type: Recreate
+          rollingUpdate: null
+  failed_when: false
+
+- name: Patch nextcloud-postgres strategy to Recreate
+  kubernetes.core.k8s:
+    state: patched
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    kind: Deployment
+    name: nextcloud-postgres
+    namespace: nextcloud
+    definition:
+      spec:
+        strategy:
+          type: Recreate
+          rollingUpdate: null
+  failed_when: false
+
 - name: Apply nextcloud manifests
   kubernetes.core.k8s:
     state: present

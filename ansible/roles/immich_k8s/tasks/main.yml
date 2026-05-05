@@ -23,6 +23,34 @@
         IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
         JWT_SECRET: "{{ jwt_secret }}"
 
+- name: Patch immich-postgres strategy to Recreate
+  kubernetes.core.k8s:
+    state: patched
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    kind: Deployment
+    name: immich-postgres
+    namespace: immich
+    definition:
+      spec:
+        strategy:
+          type: Recreate
+          rollingUpdate: null
+  failed_when: false
+
+- name: Patch immich-server strategy to Recreate
+  kubernetes.core.k8s:
+    state: patched
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    kind: Deployment
+    name: immich-server
+    namespace: immich
+    definition:
+      spec:
+        strategy:
+          type: Recreate
+          rollingUpdate: null
+  failed_when: false
+
 - name: Apply immich manifests
   kubernetes.core.k8s:
     state: present
