@@ -3,6 +3,7 @@
     name: python3-kubernetes
     state: present
     update_cache: true
+    cache_valid_time: 3600
 
 # Lit le token depuis le master en mémoire (base64).
 # delegate_to : exécute cette tâche sur le master depuis le contexte du worker.
@@ -33,7 +34,7 @@
 # Vérifié depuis le master car c'est lui qui a kubectl + kubeconfig.
 - name: Wait for worker node to be Ready
   ansible.builtin.command:
-    cmd: kubectl get node {{ inventory_hostname }} --no-headers
+    cmd: kubectl get node {{ ansible_hostname }} --no-headers
   register: worker_node_status
   until: worker_node_status.rc == 0 and 'Ready' in worker_node_status.stdout
   retries: 30
