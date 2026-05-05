@@ -15,19 +15,19 @@
 - name: Apply Traefik CRDs
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/traefik/crds.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/traefik/crds.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply Traefik RBAC
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/traefik/rbac.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/traefik/rbac.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply Traefik Deployment
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/traefik/deployment.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/traefik/deployment.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 
@@ -40,7 +40,7 @@
 - name: Apply Traefik Service LoadBalancer
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/traefik/service.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/traefik/service.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
     force: true
 

@@ -20,35 +20,35 @@
 - name: Apply node-exporter DaemonSet
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/monitoring/node-exporter.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/node-exporter.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply cadvisor DaemonSet
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/monitoring/cadvisor.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/cadvisor.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply Prometheus
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/monitoring/prometheus.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/prometheus.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply Loki
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/monitoring/loki.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/loki.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply Promtail DaemonSet
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/monitoring/promtail.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/promtail.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 - name: Apply Grafana
   kubernetes.core.k8s:
     state: present
-    src: "{{ playbook_dir }}/../k8s/monitoring/grafana.yaml"
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/grafana.yaml') | from_yaml_all | list }}"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
