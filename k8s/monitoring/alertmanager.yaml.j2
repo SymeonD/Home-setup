@@ -19,14 +19,6 @@ data:
       - name: discord
         discord_configs:
           - webhook_url: "{{ discord_webhook_url }}"
-            title: >-
-              {% raw %}{{ if eq .Status "firing" }}🔴{% else %}✅{% end %} {{ .GroupLabels.alertname }}{% endraw %}
-
-            message: >-
-              {% raw %}{{ range .Alerts }}
-              **{{ .Annotations.summary }}**
-              {{ .Annotations.description }}
-              {{ end }}{% endraw %}
 
 ---
 apiVersion: apps/v1
