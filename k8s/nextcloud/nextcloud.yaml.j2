@@ -59,6 +59,8 @@ metadata:
   namespace: nextcloud
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: nextcloud-postgres
@@ -82,6 +84,8 @@ spec:
                 secretKeyRef:
                   name: nextcloud-secrets
                   key: POSTGRES_PASSWORD
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums"
           ports:
             - containerPort: 5432
           resources:
@@ -130,6 +134,8 @@ metadata:
   namespace: nextcloud
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: nextcloud
