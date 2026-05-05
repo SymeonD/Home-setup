@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alerts
+  namespace: monitoring
+data:
+  alerts.yaml: |
+    groups:
+      - name: homelab
+        interval: 1m
+        rules:
+
+          - alert: DiskSpaceLow
+            expr: >
+              (node_filesystem_avail_bytes{mountpoint="/srv/data"}
+              / node_filesystem_size_bytes{mountpoint="/srv/data"}) * 100 < 10
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Disque /srv/data presque plein"
+              description: "Il reste {{ $value | humanize }}% d'espace libre sur /srv/data"
+
+          - alert: DiskSpaceLowBackup
+            expr: >
+              (node_filesystem_avail_bytes{mountpoint="/srv/backup"}
+              / node_filesystem_size_bytes{mountpoint="/srv/backup"}) * 100 < 10
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Disque /srv/backup presque plein"
+              description: "Il reste {{ $value | humanize }}% d'espace libre sur /srv/backup"
+
+          - alert: TargetDown
+            expr: up == 0
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Target {{ $labels.job }} inaccessible"
+              description: "Le job {{ $labels.job }} ne répond plus depuis 2 minutes"
+
+          - alert: HighMemoryUsage
+            expr: >
+              (1 - (node_memory_MemAvailable_bytes
+              / node_memory_MemTotal_bytes)) * 100 > 90
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Mémoire élevée sur {{ $labels.instance }}"
+              description: "{{ $value | humanize }}% de mémoire utilisée"
+
+          - alert: PodCrashLooping
+            expr: >
+              increase(kube_pod_container_status_restarts_total[1h]) > 5
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} en crash loop"
+              description: "{{ $value }} redémarrages en 1h"

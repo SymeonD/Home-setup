@@ -8,6 +8,14 @@ data:
     global:
       scrape_interval: 15s
 
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets: ["alertmanager.monitoring.svc.cluster.local:9093"]
+
+    rule_files:
+      - /etc/prometheus/rules/*.yaml
+
     scrape_configs:
       - job_name: node
         static_configs:
@@ -113,12 +121,17 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/prometheus
+            - name: alerts
+              mountPath: /etc/prometheus/rules
             - name: data
               mountPath: /prometheus
       volumes:
         - name: config
           configMap:
             name: prometheus-config
+        - name: alerts
+          configMap:
+            name: prometheus-alerts
         - name: data
           persistentVolumeClaim:
             claimName: prometheus-pvc
