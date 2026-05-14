@@ -29,6 +29,18 @@
     template: "{{ playbook_dir }}/../k8s/monitoring/alertmanager.yaml.j2"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
 
+- name: Apply kube-state-metrics
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/kube-state-metrics.yaml') | from_yaml_all | list }}"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+- name: Apply Pushgateway
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/pushgateway.yaml') | from_yaml_all | list }}"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
 - name: Apply node-exporter DaemonSet
   kubernetes.core.k8s:
     state: present

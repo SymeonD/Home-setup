@@ -128,6 +128,11 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:11.3.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 3000
           resources:

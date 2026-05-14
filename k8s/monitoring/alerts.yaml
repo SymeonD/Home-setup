@@ -61,3 +61,12 @@ data:
             annotations:
               summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} en crash loop"
               description: "{{ $value }} redémarrages en 1h"
+
+          - alert: BackupTooOld
+            expr: time() - backup_last_success_timestamp_seconds > 90000
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Backup trop ancien (> 25h)"
+              description: "Le dernier backup Restic date de plus de 25h"

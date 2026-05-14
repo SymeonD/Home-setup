@@ -128,4 +128,9 @@ if [ ${#FAILED_SERVICES[@]} -gt 0 ]; then
   exit 1
 else
   echo "=== ✅ BACKUP COMPLETED ([${SERVICES[*]}] @ $DATE) ==="
+  PUSHGW_IP=$(kubectl get svc pushgateway -n monitoring -ojsonpath='{.spec.clusterIP}' 2>/dev/null)
+  if [ -n "$PUSHGW_IP" ]; then
+    echo "backup_last_success_timestamp_seconds $(date +%s)" | \
+      curl -s --data-binary @- "http://$PUSHGW_IP:9091/metrics/job/restic_backup" || true
+  fi
 fi
