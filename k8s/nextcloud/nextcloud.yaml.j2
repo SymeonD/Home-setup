@@ -21,9 +21,6 @@ spec:
           image: redis:7.4
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
           ports:
             - containerPort: 6379
           resources:
@@ -81,9 +78,6 @@ spec:
           image: postgres:16.4
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
           env:
             - name: POSTGRES_DB
               value: "nextcloud"
