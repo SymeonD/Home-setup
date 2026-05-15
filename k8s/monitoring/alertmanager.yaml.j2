@@ -27,7 +27,7 @@ data:
     receivers:
       - name: discord
         discord_configs:
-          - webhook_url_file: /etc/alertmanager-secrets/DISCORD_WEBHOOK_URL
+          - webhook_url: "{{ discord_webhook_url }}"
 
 ---
 apiVersion: apps/v1
@@ -82,16 +82,10 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/alertmanager
-            - name: secrets
-              mountPath: /etc/alertmanager-secrets
-              readOnly: true
       volumes:
         - name: config
           configMap:
             name: alertmanager-config
-        - name: secrets
-          secret:
-            secretName: alertmanager-secrets
 ---
 apiVersion: v1
 kind: Service
