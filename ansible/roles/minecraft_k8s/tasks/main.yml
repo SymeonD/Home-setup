@@ -22,5 +22,5 @@
 - name: Reload prometheus config
   kubernetes.core.k8s:
     state: present
-    definition: "{{ lookup('file', playbook_dir + '/../k8s/monitoring/prometheus.yaml') | from_yaml_all | list }}"
+    template: "{{ playbook_dir }}/../k8s/monitoring/prometheus.yaml.j2"
     kubeconfig: /etc/rancher/k3s/k3s.yaml
