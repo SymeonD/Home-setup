@@ -33,7 +33,7 @@ data:
               description: "Il reste {{ $value | humanize }}% d'espace libre sur /srv/backup"
 
           - alert: TargetDown
-            expr: up == 0
+            expr: up{instance!="worker"} == 0
             for: 2m
             labels:
               severity: critical
