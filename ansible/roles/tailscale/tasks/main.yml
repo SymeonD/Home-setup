@@ -1,0 +1,101 @@
+---
+# Variables attendues (à définir dans le playbook, group_vars, ou --extra-vars) :
+#   tailscale_authkey            (obligatoire, à chiffrer via ansible-vault)
+#   tailscale_hostname           (optionnel, défaut: inventory_hostname)
+#   tailscale_ssh_enabled        (optionnel, défaut: true)
+#   tailscale_accept_routes      (optionnel, défaut: false)
+#   tailscale_advertise_exit_node (optionnel, défaut: false)
+#   tailscale_login_server       (optionnel, défaut: "" -> tailscale.com officiel)
+#   tailscale_disable_password_auth (optionnel, défaut: false)
+
+- name: Vérifier que la auth key est fournie
+  ansible.builtin.assert:
+    that:
+      - tailscale_authkey is defined
+      - tailscale_authkey | length > 0
+    fail_msg: >
+      tailscale_authkey n'est pas défini. Passe-le via ansible-vault,
+      une variable d'environnement, ou --extra-vars.
+    quiet: true
+
+- name: Ajouter la clé GPG du dépôt Tailscale
+  ansible.builtin.get_url:
+    url: "https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_distribution_release }}.noarmor.gpg"
+    dest: /usr/share/keyrings/tailscale-archive-keyring.gpg
+    mode: "0644"
+
+- name: Ajouter le dépôt APT Tailscale
+  ansible.builtin.get_url:
+    url: "https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_distribution_release }}.tailscale-keyring.list"
+    dest: /etc/apt/sources.list.d/tailscale.list
+    mode: "0644"
+  register: tailscale_repo_added
+
+- name: Mettre à jour le cache APT si le dépôt vient d'être ajouté
+  ansible.builtin.apt:
+    update_cache: true
+  when: tailscale_repo_added.changed
+
+- name: Installer Tailscale
+  ansible.builtin.apt:
+    name: tailscale
+    state: present
+
+- name: S'assurer que le service tailscaled est démarré et activé
+  ansible.builtin.systemd:
+    name: tailscaled
+    state: started
+    enabled: true
+
+- name: Vérifier l'état actuel de la connexion Tailscale
+  ansible.builtin.command: tailscale status --json
+  register: tailscale_status_raw
+  changed_when: false
+  failed_when: false
+
+- name: Déterminer si le nœud est déjà connecté au tailnet
+  ansible.builtin.set_fact:
+    tailscale_already_up: >-
+      {{
+        (tailscale_status_raw.stdout | from_json).BackendState == "Running"
+        if tailscale_status_raw.rc == 0 and tailscale_status_raw.stdout | length > 0
+        else false
+      }}
+
+- name: Connecter le nœud au tailnet (tailscale up)
+  ansible.builtin.command: >-
+    tailscale up
+    --authkey={{ tailscale_authkey }}
+    --hostname={{ tailscale_hostname | default(inventory_hostname) }}
+    {{ '--ssh' if (tailscale_ssh_enabled | default(true)) else '' }}
+    {{ '--accept-routes' if (tailscale_accept_routes | default(false)) else '' }}
+    {{ '--advertise-exit-node' if (tailscale_advertise_exit_node | default(false)) else '' }}
+    {{ ('--login-server=' + tailscale_login_server) if (tailscale_login_server | default('') | length > 0) else '' }}
+  when: not tailscale_already_up
+  register: tailscale_up_result
+  changed_when: tailscale_up_result.rc == 0
+  no_log: true # évite de logguer la authkey en clair dans l'output
+
+- name: Récupérer le statut final pour affichage
+  ansible.builtin.command: tailscale status
+  register: tailscale_final_status
+  changed_when: false
+
+- name: Afficher le statut Tailscale
+  ansible.builtin.debug:
+    var: tailscale_final_status.stdout_lines
+
+- name: Désactiver l'authentification SSH par mot de passe (optionnel)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    validate: "sshd -t -f %s"
+  when: (tailscale_disable_password_auth | default(false)) and (tailscale_ssh_enabled | default(true))
+  register: sshd_config_changed
+
+- name: Redémarrer sshd si la config a changé
+  ansible.builtin.systemd:
+    name: ssh
+    state: restarted
+  when: sshd_config_changed.changed | default(false)

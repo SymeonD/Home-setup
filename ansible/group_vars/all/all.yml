@@ -8,3 +8,5 @@ timezone: Europe/Paris
 
 domain: "{{ vault_domain }}"
 email: "{{ vault_email }}"
+
+tailscale_hostname: "bundall"

@@ -14,6 +14,7 @@
   become: true
   roles:
     - storage
+    - tailscale
     - k3s
     - monitoring_k8s
     - traefik_k8s
